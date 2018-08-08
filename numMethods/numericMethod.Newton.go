@@ -1,8 +1,6 @@
 package numMethods
 
-import (
-	"math"
-)
+import ("math")
 
 type NewtonMethod struct {
 	InitialGuess float64
@@ -13,7 +11,7 @@ func (nm *NewtonMethod) Calculate(F NumericFunc, derivativeF NumericFunc, method
 
 	xCurrent := nm.InitialGuess
 
-	var iterationPassed uint64 = 0
+	var iterationPassed  uint64 = 0
 	for iterationPassed < methodParams.MaxIterationsCount {
 
 		fValue := F(xCurrent)
@@ -21,7 +19,7 @@ func (nm *NewtonMethod) Calculate(F NumericFunc, derivativeF NumericFunc, method
 
 		xNext := xCurrent - fValue/fDerivativeValue
 
-		dx := math.Abs(xNext - xCurrent)
+		dx := math.Abs(xNext-xCurrent)
 		if dx <= methodParams.Epsilon {
 			return xNext, NumericResultType_HasSolution, nil
 		}

@@ -1,5 +1,6 @@
 package numMethods
 
+
 const FunctionsDeltaIsZero = "Delta is zero"
 
 const FunctionValueIsNanOrInfinity = "Value of function is NaN of Infinity"

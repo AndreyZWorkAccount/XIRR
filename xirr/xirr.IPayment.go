@@ -17,3 +17,8 @@ type IPayment interface {
 	//True if current payment is after p
 	After(p IPayment) bool
 }
+
+
+
+
+
