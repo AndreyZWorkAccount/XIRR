@@ -29,8 +29,8 @@ type NumericMethodParams struct {
 // type to represent status of calculations
 type NumericResultType int
 const (
-	NumericResultType_HasSolution NumericResultType = 0
-	NumericResultType_NoSolution NumericResultType = 1
+	NumericResultType_HasSolution NumericResultType = 1 + iota
+	NumericResultType_NoSolution
 )
 
 

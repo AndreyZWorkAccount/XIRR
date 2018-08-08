@@ -11,9 +11,9 @@ import (
 func main() {
 
 	testValues := []xirr.IPayment{
-		xirr.NewPayment(-55506, time.Date(2000,1,1,12,0,0,0, time.UTC)),
-		xirr.NewPayment(8340, time.Date(2001,2,6,12,0,0,0, time.UTC)),
-		xirr.NewPayment(-293, time.Date(2001,3,28,12,0,0,0, time.UTC)),
+		xirr.NewPayment(-55506, OnDate(1,time.January,2000)),
+		xirr.NewPayment(8340, OnDate(6,time.February,2001)),
+		xirr.NewPayment(-293, OnDate(28,time.March,2001)),
 	}
 
 	XIRR(testValues, 365)
@@ -61,6 +61,10 @@ func PrintResult(methodName string,  err *numMethods.NumericMethodError, res flo
 	} else {
 		fmt.Printf("%s", err.Error())
 	}
+}
+
+func OnDate(day int, month time.Month, year int ) time.Time{
+	return time.Date(year,month,day,12,0,0,0, time.UTC);
 }
 
 
