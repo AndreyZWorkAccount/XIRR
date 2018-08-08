@@ -24,14 +24,18 @@ func XIRR(payments []xirr.IPayment, daysInYear uint16) (float64, *numMethods.Num
 	if len(payments) == 0 {
 		return 0, nil
 	}
+
+	//order payments by date
 	sort.Slice(payments, func(i,j int) bool { return payments[i].Before(payments[j]) })
 
 	startPaymentDate := payments[0].Date()
 
+	//NPV function
 	f := func(irr float64) float64{
 		return xirr.NetPresentValue(irr, payments, startPaymentDate, daysInYear)
 	}
 
+	//NPV derivative
 	df := func(irr float64) float64{
 		return xirr.NetPresentValueDerivative(irr, payments, startPaymentDate, daysInYear)
 	}
