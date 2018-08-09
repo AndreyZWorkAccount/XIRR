@@ -1,4 +1,4 @@
-package utility
+package time_Extensions
 
 import (
 	"time"

@@ -28,12 +28,12 @@ func (s *SecantMethod) Calculate(F NumericFunc, methodParams *NumericMethodParam
 		fxLeft := F(xLeft)
 
 		if isNanOrInfinity(fxLeft,fxRight){
-			return xRight, NumericResultType_NoSolution, error(FunctionValueIsNanOrInfinity)
+			return xRight, NumericResultType_NoSolution, FunctionValueIsNanOrInfinityErr
 		}
 
 		deltaF := fxRight - fxLeft
 		if deltaF == 0 {
-			return xRight, NumericResultType_NoSolution, error(FunctionsDeltaIsZero)
+			return xRight, NumericResultType_NoSolution, FunctionsDeltaIsZeroErr
 		}
 
 		xRight = (xLeft*F(xRight) - xRight*F(xLeft))/deltaF
@@ -43,10 +43,6 @@ func (s *SecantMethod) Calculate(F NumericFunc, methodParams *NumericMethodParam
 	}
 
 	return xRight, NumericResultType_NoSolution, nil
-}
-
-func error(description string) *NumericMethodError{
-	return &NumericMethodError{"Secant", description}
 }
 
 func average(a float64,b float64) float64{

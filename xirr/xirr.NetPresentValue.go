@@ -1,13 +1,13 @@
 package xirr
 
 import (
-	"time"
-	"math"
-	"NumericMethods/utility"
+	. "time"
+	. "math"
+	. "../time.Extensions"
 )
 
 //NPV
-func NetPresentValue(irrValue float64, payments []IPayment, firstPaymentDate *time.Time, daysInYear uint16 ) float64{
+func NetPresentValue(irrValue float64, payments []IPayment, firstPaymentDate *Time, daysInYear uint16 ) float64{
 	if irrValue <= IrrMinValue{
 		irrValue = IrrDefaultValue
 	}
@@ -17,14 +17,14 @@ func NetPresentValue(irrValue float64, payments []IPayment, firstPaymentDate *ti
 	}
 	return npv
 }
-func netPresentValueForSinglePeriod( irrValue float64, payment IPayment, startDate *time.Time, daysInYear uint16 )  float64 {
-	var diffInDays = utility.DiffInDays(payment.Date(), startDate)
+func netPresentValueForSinglePeriod( irrValue float64, payment IPayment, startDate *Time, daysInYear uint16 )  float64 {
+	var diffInDays = DiffInDays(payment.Date(), startDate)
 	periodNumber := diffInDays/float64(daysInYear)
-	return payment.Amount()*math.Pow(1+irrValue, periodNumber)
+	return payment.Amount()* Pow(1+irrValue, periodNumber)
 }
 
 //d(NPV)/dx
-func NetPresentValueDerivative(irrValue float64, payments []IPayment, firstPaymentDate *time.Time, daysInYear uint16 ) float64{
+func NetPresentValueDerivative(irrValue float64, payments []IPayment, firstPaymentDate *Time, daysInYear uint16 ) float64{
 	if irrValue <= IrrMinValue{
 		irrValue = IrrDefaultValue
 	}
@@ -34,10 +34,10 @@ func NetPresentValueDerivative(irrValue float64, payments []IPayment, firstPayme
 	}
 	return npv
 }
-func netPresentValueDerivativeForSinglePeriod(irrValue float64, payment IPayment, startDate *time.Time, daysInYear uint16) float64{
-	diffInDays := utility.DiffInDays(payment.Date(), startDate)
+func netPresentValueDerivativeForSinglePeriod(irrValue float64, payment IPayment, startDate *Time, daysInYear uint16) float64{
+	diffInDays := DiffInDays(payment.Date(), startDate)
 	daysInYearF := float64(daysInYear)
-	return  payment.Amount() * (1.0 / daysInYearF ) * diffInDays * math.Pow(1.0 + irrValue, (diffInDays/daysInYearF) - 1.0 );
+	return  payment.Amount() * (1.0 / daysInYearF ) * diffInDays * Pow(1.0 + irrValue, (diffInDays/daysInYearF) - 1.0 );
 }
 
 
