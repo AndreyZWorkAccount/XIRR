@@ -1,6 +1,6 @@
 package xirr
 
-import "time"
+import . "time"
 
 //Payment interface
 type IPayment interface {
@@ -9,7 +9,7 @@ type IPayment interface {
 	Amount() float64
 
 	//date of payment
-	Date() *time.Time
+	Date() *Time
 
 	//True if current payment is before p
 	Before(p IPayment) bool

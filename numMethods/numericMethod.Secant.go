@@ -1,7 +1,7 @@
 package numMethods
 
 import (
-	"math"
+	. "math"
 	)
 
 type SecantMethod struct {
@@ -17,7 +17,7 @@ func (s *SecantMethod) Calculate(F NumericFunc, methodParams *NumericMethodParam
 	for iterationPassed < methodParams.MaxIterationsCount {
 
 		//check if we reach necessary precision
-		dx := math.Abs(xRight - xLeft)
+		dx := Abs(xRight - xLeft)
 		if dx < methodParams.Epsilon{
 			return average(xLeft,xRight), NumericResultType_HasSolution, nil
 		}
@@ -51,7 +51,7 @@ func average(a float64,b float64) float64{
 
 func isNanOrInfinity(numbers ...float64) bool{
 	for _,num := range numbers{
-		if math.IsInf(num,0) || math.IsNaN(num){
+		if IsInf(num,0) || IsNaN(num){
 			return true
 		}
 	}

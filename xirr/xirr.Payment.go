@@ -1,6 +1,6 @@
 package xirr
 
-import "time"
+import . "time"
 
 //Basic implementation of Payment interface
 type Payment struct {
@@ -9,10 +9,10 @@ type Payment struct {
 	_amount float64
 
 	//date of payment
-	_date time.Time
+	_date Time
 }
 
-func NewPayment(amount float64, date time.Time) *Payment{
+func NewPayment(amount float64, date Time) *Payment{
 	return &Payment{_amount:amount, _date:date}
 }
 
@@ -21,7 +21,7 @@ func (p *Payment) Amount() float64{
 	return p._amount
 }
 
-func (p *Payment) Date() *time.Time{
+func (p *Payment) Date() *Time {
 	return &p._date
 }
 
