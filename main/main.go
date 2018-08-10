@@ -4,7 +4,7 @@ import  (
 	. "../numMethods"
 	. "../xirr"
 	. "fmt"
-	. "sort"
+	"sort"
 	. "time"
 	)
 
@@ -26,7 +26,7 @@ func XIRR(payments []IPayment, daysInYear uint16) (float64, *NumericMethodError)
 	}
 
 	//order payments by date
-	Slice(payments, func(i,j int) bool { return payments[i].Before(payments[j]) })
+	sort.Slice(payments, func(i,j int) bool { return payments[i].Before(payments[j]) })
 
 	startPaymentDate := payments[0].Date()
 
