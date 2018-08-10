@@ -10,6 +10,11 @@ type NumericMethodUsingDerivative interface {
 	Calculate(F NumericFunc, derivativeF NumericFunc, methodParams *NumericMethodParams) (float64, NumericResultType, *NumericMethodError)
 }
 
+//type to a numeric method using second derivative of function
+type NumericMethodUsingSecondDerivative interface {
+	Calculate(F NumericFunc, derivativeF NumericFunc, secondDerivativeF NumericFunc, methodParams *NumericMethodParams) (float64, NumericResultType, *NumericMethodError)
+}
+
 
 // type to represent a function
 type NumericFunc func(float64) float64

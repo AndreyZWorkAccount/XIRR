@@ -20,9 +20,9 @@ func main() {
 }
 
 // IRR returns the Internal Rate of Return (IRR).
-func XIRR(payments []IPayment, daysInYear uint16) (float64, *NumericMethodError) {
+func XIRR(payments []IPayment, daysInYear uint16) {
 	if len(payments) == 0 {
-		return 0, nil
+		return
 	}
 
 	//order payments by date
@@ -34,11 +34,21 @@ func XIRR(payments []IPayment, daysInYear uint16) (float64, *NumericMethodError)
 	f := func(irr float64) float64{
 		return NetPresentValue(irr, payments, startPaymentDate, daysInYear)
 	}
-
 	//NPV derivative
 	df := func(irr float64) float64{
 		return NetPresentValueDerivative(irr, payments, startPaymentDate, daysInYear)
 	}
+	//NPV second derivative
+	ddf := func(irr float64) float64{
+		return NetPresentValueSecondDerivative(irr, payments, startPaymentDate, daysInYear)
+	}
+
+	RunNumericMethods(f, df, ddf)
+
+	return
+}
+
+func RunNumericMethods(f NumericFunc, df NumericFunc, ddf NumericFunc){
 
 	methodParams := NumericMethodParams{MaxIterationsCount: 1000,Epsilon:0.0000001}
 
@@ -52,7 +62,10 @@ func XIRR(payments []IPayment, daysInYear uint16) (float64, *NumericMethodError)
 	res, _, err = secantMethod.Calculate(f, &methodParams)
 	PrintResult("Secant", err, res)
 
-	return res, err
+	//modified secant
+	var modifiedSecantMethod = &SecantModifiedMethod{XLeftInit: -0.9,XRightInit:-0.2}
+	res, _, err = modifiedSecantMethod.Calculate(f, df, ddf, &methodParams)
+	PrintResult("Modified Secant", err, res)
 }
 
 func PrintResult(methodName string,  err *NumericMethodError, res float64) {
