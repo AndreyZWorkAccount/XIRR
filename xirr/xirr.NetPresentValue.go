@@ -3,7 +3,7 @@ package xirr
 import (
 	. "time"
 	. "math"
-	. "../time.Extensions"
+	. "XIRR/time.Extensions"
 )
 
 //NPV

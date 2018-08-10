@@ -1,22 +1,23 @@
 package main
 
 import  (
-	. "../numMethods"
-	. "../xirr"
+	. "XIRR/numMethods"
+	. "XIRR/xirr"
 	. "fmt"
 	"sort"
-	. "time"
+	"XIRR/test"
 	)
 
 func main() {
 
-	testValues := []IPayment{
-		NewPayment(-55506, OnDate(1, January,2000)),
-		NewPayment(8340, OnDate(6, February,2001)),
-		NewPayment(-293, OnDate(28, March,2001)),
-	}
+    for _,testCase := range test.TestCases{
+    	Println("-------------New test case-----------")
 
-	XIRR(testValues, 365)
+		XIRR(testCase.Payments, 365)
+
+    	Printf("Expected: %v", testCase.ExpectedValue)
+    	Println()
+	}
 }
 
 // IRR returns the Internal Rate of Return (IRR).
@@ -53,17 +54,17 @@ func RunNumericMethods(f NumericFunc, df NumericFunc, ddf NumericFunc){
 	methodParams := NumericMethodParams{MaxIterationsCount: 1000,Epsilon:0.0000001}
 
 	//newton
-	var newtonMethod = &NewtonMethod{InitialGuess: -0.999900}
+	var newtonMethod = &NewtonMethod{InitialGuess: 0.1}
 	res, _, err := newtonMethod.Calculate(f, df, &methodParams)
 	PrintResult("Newton", err, res)
 
 	//secant
-	var secantMethod = &SecantMethod{XLeftInit: -0.9,XRightInit:-0.2}
+	var secantMethod = &SecantMethod{XLeftInit: -0.2,XRightInit:0.0001}
 	res, _, err = secantMethod.Calculate(f, &methodParams)
 	PrintResult("Secant", err, res)
 
 	//modified secant
-	var modifiedSecantMethod = &SecantModifiedMethod{XLeftInit: -0.9,XRightInit:-0.2}
+	var modifiedSecantMethod = &SecantModifiedMethod{XLeftInit: -0.2,XRightInit:0.0001, MinimumRateOfXDecrease: 0.00000001}
 	res, _, err = modifiedSecantMethod.Calculate(f, df, ddf, &methodParams)
 	PrintResult("Modified Secant", err, res)
 }
@@ -76,8 +77,5 @@ func PrintResult(methodName string,  err *NumericMethodError, res float64) {
 	}
 }
 
-func OnDate(day int, month Month, year int ) Time {
-	return Date(year,month,day,12,0,0,0, UTC);
-}
 
 

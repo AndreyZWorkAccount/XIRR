@@ -27,7 +27,7 @@ func (s *SecantMethod) Calculate(F NumericFunc, methodParams *NumericMethodParam
 		fxRight := F(xRight)
 		fxLeft := F(xLeft)
 
-		if isNanOrInfinity(fxLeft,fxRight){
+		if AnyNanOrInfinity(fxLeft,fxRight){
 			return xRight, NumericResultType_NoSolution, FunctionValueIsNanOrInfinityErr
 		}
 
@@ -44,17 +44,3 @@ func (s *SecantMethod) Calculate(F NumericFunc, methodParams *NumericMethodParam
 
 	return xRight, NumericResultType_NoSolution, nil
 }
-
-func average(a float64,b float64) float64{
-	return a + (b - a)/2
-}
-
-func isNanOrInfinity(numbers ...float64) bool{
-	for _,num := range numbers{
-		if IsInf(num,0) || IsNaN(num){
-			return true
-		}
-	}
-	return false
-}
-
