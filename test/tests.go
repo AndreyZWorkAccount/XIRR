@@ -1,7 +1,7 @@
 package test
 
 import (
-	. "XIRR/xirr"
+	. "XIRR/netPresentValue"
 	. "time"
 	)
 

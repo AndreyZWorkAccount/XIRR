@@ -1,6 +1,11 @@
-package numMethods
+package secantMethod
 
-import . "math"
+import (
+	. "math"
+	. "XIRR/numMethods"
+)
+
+
 
 type SecantModifiedMethod struct {
 	XLeftInit, XRightInit float64

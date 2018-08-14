@@ -2,7 +2,9 @@ package main
 
 import  (
 	. "XIRR/numMethods"
-	. "XIRR/xirr"
+	. "XIRR/newtonMethod"
+	. "XIRR/secantMethod"
+	. "XIRR/netPresentValue"
 	. "fmt"
 	"sort"
 	"XIRR/test"

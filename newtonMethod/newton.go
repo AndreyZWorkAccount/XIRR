@@ -1,7 +1,8 @@
-package numMethods
+package newtonMethod
 
 import (
 	. "math"
+	. "XIRR/numMethods"
 )
 
 type NewtonMethod struct {

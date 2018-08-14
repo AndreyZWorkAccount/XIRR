@@ -1,7 +1,8 @@
-package numMethods
+package secantMethod
 
 import (
 	. "math"
+	. "XIRR/numMethods"
 	)
 
 type SecantMethod struct {

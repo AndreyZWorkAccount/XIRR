@@ -1,4 +1,4 @@
-package xirr
+package netPresentValue
 
 import . "time"
 
