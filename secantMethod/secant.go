@@ -3,6 +3,7 @@ package secantMethod
 import (
 	. "math"
 	. "XIRR/numMethods"
+	. "XIRR/float.Extensions"
 	)
 
 type SecantMethod struct {
@@ -20,7 +21,7 @@ func (s *SecantMethod) Calculate(F NumericFunc, methodParams *NumericMethodParam
 		//check if we reach necessary precision
 		dx := Abs(xRight - xLeft)
 		if dx < methodParams.Epsilon{
-			return average(xLeft,xRight), NumericResultType_HasSolution, nil
+			return Average(xLeft,xRight), NumericResultType_HasSolution, nil
 		}
 
 		xRightOld := xRight

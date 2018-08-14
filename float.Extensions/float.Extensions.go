@@ -1,8 +1,8 @@
-package secantMethod
+package float_Extensions
 
 import . "math"
 
-func average(a float64, b float64) float64{
+func Average(a float64, b float64) float64{
 	return a + (b - a)/2
 }
 

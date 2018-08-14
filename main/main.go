@@ -4,6 +4,7 @@ import  (
 	. "XIRR/numMethods"
 	. "XIRR/newtonMethod"
 	. "XIRR/secantMethod"
+	. "XIRR/secantModifiedMethod"
 	. "XIRR/netPresentValue"
 	. "fmt"
 	"sort"

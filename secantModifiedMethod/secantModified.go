@@ -1,10 +1,10 @@
-package secantMethod
+package secantModifiedMethod
 
 import (
 	. "math"
 	. "XIRR/numMethods"
+	. "XIRR/float.Extensions"
 )
-
 
 
 type SecantModifiedMethod struct {
@@ -17,6 +17,7 @@ type SecantModifiedMethod struct {
 // NumericMethodUsingSecondDerivative interface implementation
 func (method *SecantModifiedMethod) Calculate(F NumericFunc, derivativeF NumericFunc, secondDerivativeF NumericFunc,
 	methodParams *NumericMethodParams) (float64, NumericResultType, *NumericMethodError){
+
 
 	xLeft := method.XLeftInit
 	xRight := method.XRightInit
@@ -32,7 +33,7 @@ func (method *SecantModifiedMethod) Calculate(F NumericFunc, derivativeF Numeric
 			return 0, NumericResultType_NoSolution, err
 		}
 		if solutionFound {
-			return average(xLeft,xRight), NumericResultType_HasSolution, nil
+			return Average(xLeft,xRight), NumericResultType_HasSolution, nil
 		}
 		iterationPassed++
 	}
@@ -66,7 +67,7 @@ func (method *SecantModifiedMethod) runIteration(xLeft float64, xRight float64, 
 	}
 
 	if Abs(dx - prevIterationDx) < method.MinimumRateOfXDecrease{
-		xAvg := average(xLeft,xRight)
+		xAvg := Average(xLeft,xRight)
 		FxAvg := F(xAvg)
 		if (FxLeft < 0 && FxAvg > 0) || (FxLeft > 0 && FxAvg < 0){
 			xRight = xAvg
