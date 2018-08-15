@@ -1,10 +1,10 @@
 package main
 
 import  (
-	. "XIRR/numMethods"
+	. "../numMethods"
 	. "fmt"
-	"XIRR/xirrCalclulation"
-	"XIRR/test"
+	"../xirrCalclulation"
+	"../test"
 )
 
 func main() {

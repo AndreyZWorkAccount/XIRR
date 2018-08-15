@@ -2,8 +2,8 @@ package secant
 
 import (
 	. "math"
-	. "XIRR/numMethods"
-	. "XIRR/float.Extensions"
+	. "../numMethods"
+	. "../float.Extensions"
 	)
 
 type Method struct {
