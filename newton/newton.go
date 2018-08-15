@@ -1,18 +1,23 @@
-package newtonMethod
+package newton
 
 import (
 	. "math"
 	. "XIRR/numMethods"
 )
 
-type NewtonMethod struct {
-	InitialGuess float64
+type Method struct {
+	initialGuess float64
 }
 
-// NumericMethodUsingDerivative interface implementation
-func (nm *NewtonMethod) Calculate(F NumericFunc, derivativeF NumericFunc, methodParams *NumericMethodParams) (float64, NumericResultType, *NumericMethodError) {
+func NewMethod(guess float64) Method{
+	return Method{initialGuess:guess}
+}
 
-	xCurrent := nm.InitialGuess
+
+// NumericMethodUsingDerivative interface implementation
+func (nm *Method) Calculate(F NumericFunc, derivativeF NumericFunc, methodParams *NumericMethodParams) (float64, NumericResultType, *NumericMethodError) {
+
+	xCurrent := nm.initialGuess
 
 	var iterationPassed  uint64 = 0
 	for iterationPassed < methodParams.MaxIterationsCount {
@@ -24,12 +29,12 @@ func (nm *NewtonMethod) Calculate(F NumericFunc, derivativeF NumericFunc, method
 
 		dx := Abs(xNext-xCurrent)
 		if dx <= methodParams.Epsilon {
-			return xNext, NumericResultType_HasSolution, nil
+			return SolutionFound(xNext)
 		}
 		xCurrent = xNext
 
 		iterationPassed++
 	}
 
-	return xCurrent, NumericResultType_NoSolution, nil
+	return NoSolutionFound()
 }

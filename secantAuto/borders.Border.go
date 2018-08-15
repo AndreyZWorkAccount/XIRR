@@ -1,4 +1,4 @@
-package secantModifiedMethod
+package secantAuto
 
 //Border struct
 type Border struct {

@@ -1,4 +1,4 @@
-package secantMethod
+package secant
 
 import (
 	. "math"
@@ -6,14 +6,19 @@ import (
 	. "XIRR/float.Extensions"
 	)
 
-type SecantMethod struct {
-	XLeftInit, XRightInit float64
+type Method struct {
+	xLeftInit, xRightInit float64
 }
 
+func NewMethod(xLeft, xRight float64) Method{
+	return Method{xLeft, xRight}
+}
+
+
 // NumericMethod interface implementation
-func (s *SecantMethod) Calculate(F NumericFunc, methodParams *NumericMethodParams) (float64, NumericResultType, *NumericMethodError){
-	xLeft := s.XLeftInit
-	xRight := s.XRightInit
+func (s *Method) Calculate(F NumericFunc, methodParams *NumericMethodParams) (float64, NumericResultType, *NumericMethodError){
+	xLeft := s.xLeftInit
+	xRight := s.xRightInit
 
 	var iterationPassed  uint64 = 0
 	for iterationPassed < methodParams.MaxIterationsCount {
@@ -21,7 +26,7 @@ func (s *SecantMethod) Calculate(F NumericFunc, methodParams *NumericMethodParam
 		//check if we reach necessary precision
 		dx := Abs(xRight - xLeft)
 		if dx < methodParams.Epsilon{
-			return Average(xLeft,xRight), NumericResultType_HasSolution, nil
+			return SolutionFound(Average(xLeft,xRight))
 		}
 
 		xRightOld := xRight
@@ -30,12 +35,12 @@ func (s *SecantMethod) Calculate(F NumericFunc, methodParams *NumericMethodParam
 		fxLeft := F(xLeft)
 
 		if AnyNanOrInfinity(fxLeft,fxRight){
-			return xRight, NumericResultType_NoSolution, FunctionValueIsNanOrInfinityErr
+			return ErrorFound(FunctionValueIsNanOrInfinityErr)
 		}
 
 		deltaF := fxRight - fxLeft
 		if deltaF == 0 {
-			return xRight, NumericResultType_NoSolution, FunctionsDeltaIsZeroErr
+			return ErrorFound(FunctionsDeltaIsZeroErr)
 		}
 
 		xRight = (xLeft*F(xRight) - xRight*F(xLeft))/deltaF
@@ -44,5 +49,5 @@ func (s *SecantMethod) Calculate(F NumericFunc, methodParams *NumericMethodParam
 		iterationPassed++
 	}
 
-	return xRight, NumericResultType_NoSolution, nil
+	return NoSolutionFound()
 }

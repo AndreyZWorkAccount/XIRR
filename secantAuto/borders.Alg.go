@@ -1,10 +1,8 @@
-package secantModifiedMethod
-
-import . "XIRR/netPresentValue"
+package secantAuto
 
 type IBordersSearchAlgorithm interface {
 	//Returns a slice that contains optimal initial borders for 'secant' method applying
-	FindInitialBorders(payments []IPayment) []IBorder
+	FindInitialBorders(paymentsSumIsPositive bool) []IBorder
 }
 
 type IBorder interface {

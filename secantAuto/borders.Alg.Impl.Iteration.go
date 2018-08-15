@@ -1,4 +1,4 @@
-package secantModifiedMethod
+package secantAuto
 
 
 type BorderIterationResult struct {
