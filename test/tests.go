@@ -116,6 +116,52 @@ var TestCases = []TestCase {
 		ExpectedValue: -0.73747226819396,
 	},
 
+	TestCase{
+		Payments: []IPayment{
+			NewPayment(-2769,OnDate(1,January,2000)),
+			NewPayment(1642,OnDate(14,June,2000)),
+			NewPayment(1811,OnDate(21,September,2000)),
+			NewPayment(1898,OnDate(30,December,2001)),
+		},
+		ExpectedValue: 1.00320521593094,
+	},
+
+	TestCase{
+		Payments: []IPayment{
+			NewPayment(-75,OnDate(1,January,2000)),
+			NewPayment(-425,OnDate(23,October,2001)),
+			NewPayment(-249,OnDate(21,May,2002)),
+			NewPayment(1191,OnDate(2,May,2003)),
+			NewPayment(1172,OnDate(26,September,2004)),
+			NewPayment(785,OnDate(29,October,2004)),
+			NewPayment(869,OnDate(2,August,2006)),
+			NewPayment(879,OnDate(8,September,2007)),
+			NewPayment(-306,OnDate(27,October,2007)),
+			NewPayment(83,OnDate(4,July,2009)),
+			NewPayment(443,OnDate(6,January,2011)),
+			NewPayment(462,OnDate(15,August,2012)),
+			NewPayment(194,OnDate(3,July,2014)),
+		},
+		ExpectedValue: 0.865619027614594,
+	},
+
+	TestCase{
+		Payments: []IPayment{
+			NewPayment(-10773,OnDate(1,January,2000)),
+			NewPayment(1920,OnDate(1,February,2000)),
+			NewPayment(1198,OnDate(22,February,2001)),
+		},
+		ExpectedValue: -0.82026396356523,
+	},
+
+	TestCase{
+		Payments: []IPayment{
+			NewPayment(-1285,OnDate(1,January,2000)),
+			NewPayment(556,OnDate(17,July,2000)),},
+		ExpectedValue: -0.786544985324144,
+	},
+
+	
 }
 
 
