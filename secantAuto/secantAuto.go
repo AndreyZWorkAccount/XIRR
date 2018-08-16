@@ -33,7 +33,7 @@ func (method *Method) Calculate(F NumericFunc, derivativeF NumericFunc, secondDe
 			secantModified := secantModified.NewMethod(border.Left(), border.Right(), method.minimumRateOfXDecrease)
 			ans, resType, _ := secantModified.Calculate(F,derivativeF,secondDerivativeF,methodParams)
 
-			if resType == NumericResultType_HasSolution{
+			if resType.IsSolution(){
 				return SolutionFound(ans)
 			}
 		}

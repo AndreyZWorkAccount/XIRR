@@ -37,17 +37,11 @@ func (method XIRRCalculationMethod) Calculate(payments []IPayment) (result float
 	startPaymentDate := payments[0].Date()
 
 	//NPV function
-	F := func(irr float64) float64{
-		return NetPresentValue(irr, payments, startPaymentDate, method.daysInYear)
-	}
+	F := func(irr float64) float64{	return NetPresentValue(irr, payments, startPaymentDate, method.daysInYear)}
 	//NPV derivative
-	derivativeF := func(irr float64) float64{
-		return NetPresentValueDerivative(irr, payments, startPaymentDate, method.daysInYear)
-	}
+	derivativeF := func(irr float64) float64{ return NetPresentValueDerivative(irr, payments, startPaymentDate, method.daysInYear)}
 	//NPV second derivative
-	secondDerivativeF := func(irr float64) float64{
-		return NetPresentValueSecondDerivative(irr, payments, startPaymentDate, method.daysInYear)
-	}
+	secondDerivativeF := func(irr float64) float64{	return NetPresentValueSecondDerivative(irr, payments, startPaymentDate, method.daysInYear)}
 
 	paymentsSumIsPositive := IsPaymentsSumPositive(payments)
 
