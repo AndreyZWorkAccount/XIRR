@@ -1,6 +1,6 @@
 package secantAuto
 
-import "XIRR/netPresentValue"
+import "../netPresentValue"
 
 const PositiveSum_LeftBoundary  = -0.0001
 const PositiveSum_RightBoundary  = 0.20001

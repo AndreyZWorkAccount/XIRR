@@ -2,8 +2,8 @@ package secantModified
 
 import (
 	. "math"
-	. "XIRR/numMethods"
-	. "XIRR/float.Extensions"
+	. "../numMethods"
+	. "../float.Extensions"
 )
 
 

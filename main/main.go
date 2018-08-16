@@ -1,15 +1,15 @@
 package main
 
 import  (
-	. "XIRR/numMethods"
+	. "../numMethods"
 	. "fmt"
-	"XIRR/xirrCalclulation"
-	"XIRR/test"
+	"../xirrCalclulation"
+	"../test"
 )
 
 func main() {
 
-    for _,testCase := range test.TestCases{
+    for _,testCase := range test.TestCases(){
     	Println("*********************New test case********************")
 
 		methodParams := NumericMethodParams{MaxIterationsCount: 1000,Epsilon:0.0000001}
