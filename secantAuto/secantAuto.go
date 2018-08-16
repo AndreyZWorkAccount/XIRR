@@ -1,8 +1,8 @@
 package secantAuto
 
 import (
-	. "../numMethods"
-	"../secantModified"
+	. "github.com/AndreyZWorkAccount/XIRR/numMethods"
+	"github.com/AndreyZWorkAccount/XIRR/secantModified"
 	)
 
 type Method struct {

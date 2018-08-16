@@ -1,11 +1,11 @@
 package xirrCalclulation
 
 import (
-	. "../numMethods"
-	. "../netPresentValue"
+	. "github.com/AndreyZWorkAccount/XIRR/numMethods"
+	. "github.com/AndreyZWorkAccount/XIRR/netPresentValue"
 	. "math"
-	"../newton"
-	"../secantAuto"
+	"github.com/AndreyZWorkAccount/XIRR/newton"
+	"github.com/AndreyZWorkAccount/XIRR/secantAuto"
 	"sort"
 )
 
@@ -56,6 +56,7 @@ func (method XIRRCalculationMethod) Calculate(payments []IPayment) (result float
 	//secant
 	bordersSearchAlg := secantAuto.NewBordersSearchAlgorithm(F, derivativeF)
 	secantMethod := secantAuto.NewMethod(paymentsSumIsPositive, bordersSearchAlg , method.minRateOfIrrDecrease)
+
 	xSecant, resType, _ := secantMethod.Calculate(F, derivativeF, secondDerivativeF, method.params)
 	canFinish, bestSolution := updateBestSolution(xSecant, F, resType, bestSolution)
 	if canFinish{
@@ -95,18 +96,21 @@ func tryNewton(guess float64, F, derivativeF NumericFunc, methodParams *NumericM
 	return updateBestSolution(xNewton, F, resType, bestSolution)
 }
 
-func updateBestSolution(x float64, f NumericFunc, resType NumericResultType, currentBest Solution) (canFinish bool, newBest Solution){
-	if resType == NumericResultType_HasSolution{
-		fx := f(x)
-		bestSolution := BestSolutionOf(currentBest, Solution{x,fx })
-		if Abs(IdealNPV - bestSolution.fx) <= IrrEpsilon {
+func updateBestSolution(x float64, F NumericFunc, resType NumericResultType, currentBest Solution) (canFinish bool, newBest Solution){
+	if resType.IsSolution() {
+		bestSolution := bestSolutionOf(currentBest, Solution{x,F(x) })
+		if closeEnough(IdealNPV, bestSolution.fx) {
 			return true, bestSolution
 		}
 	}
 	return false, currentBest
 }
 
-func BestSolutionOf(old, new Solution ) Solution{
+func closeEnough(first, second float64) bool{
+	return Abs( second - first) <= IrrEpsilon
+}
+
+func bestSolutionOf(old, new Solution ) Solution{
 	if Abs(new.fx) < Abs(old.fx){
 		return new
 	}

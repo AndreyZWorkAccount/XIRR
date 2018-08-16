@@ -3,7 +3,7 @@ package netPresentValue
 import (
 	. "time"
 	. "math"
-	. "../time.Extensions"
+	. "github.com/AndreyZWorkAccount/XIRR/time.Extensions"
 )
 
 //NPV

@@ -2,7 +2,7 @@ package newton
 
 import (
 	. "math"
-	. "../numMethods"
+	. "github.com/AndreyZWorkAccount/XIRR/numMethods"
 )
 
 type Method struct {

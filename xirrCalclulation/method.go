@@ -1,8 +1,8 @@
 package xirrCalclulation
 
 import (
-	. "../netPresentValue"
-	. "../numMethods"
+	. "github.com/AndreyZWorkAccount/XIRR/netPresentValue"
+	. "github.com/AndreyZWorkAccount/XIRR/numMethods"
 )
 
 

@@ -22,3 +22,9 @@ func SolutionFound(res float64) (result float64, resultType NumericResultType, e
 	error = nil
 	return
 }
+
+
+
+func (resType *NumericResultType) IsSolution() bool{
+	return *resType == NumericResultType_HasSolution
+}

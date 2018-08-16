@@ -1,9 +1,9 @@
 package secantAuto
 
 import (
-	. "../netPresentValue"
-	"../numMethods"
-	. "../float.Extensions"
+	. "github.com/AndreyZWorkAccount/XIRR/netPresentValue"
+	. "github.com/AndreyZWorkAccount/XIRR/float.Extensions"
+	"github.com/AndreyZWorkAccount/XIRR/numMethods"
 )
 
 type NumFunc = numMethods.NumericFunc
