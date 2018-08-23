@@ -2,6 +2,7 @@ package secant
 
 import (
 	. "math"
+
 	. "github.com/AndreyZWorkAccount/XIRR/numMethods"
 	. "github.com/AndreyZWorkAccount/XIRR/float.Extensions"
 	)
@@ -16,7 +17,7 @@ func NewMethod(xLeft, xRight float64) Method{
 
 
 // NumericMethod interface implementation
-func (s *Method) Calculate(F NumericFunc, methodParams *NumericMethodParams) (float64, NumericResultType, *NumericMethodError){
+func (s *Method) Calculate(F INumericFunc, methodParams *NumericMethodParams) (float64, NumericResultType, *NumericMethodError){
 	xLeft := s.xLeftInit
 	xRight := s.xRightInit
 
@@ -31,8 +32,8 @@ func (s *Method) Calculate(F NumericFunc, methodParams *NumericMethodParams) (fl
 
 		xRightOld := xRight
 
-		fxRight := F(xRight)
-		fxLeft := F(xLeft)
+		fxRight := F.ApplyTo(xRight)
+		fxLeft := F.ApplyTo(xLeft)
 
 		if AnyNanOrInfinity(fxLeft,fxRight){
 			return ErrorFound(FunctionValueIsNanOrInfinityErr)
@@ -43,7 +44,7 @@ func (s *Method) Calculate(F NumericFunc, methodParams *NumericMethodParams) (fl
 			return ErrorFound(FunctionsDeltaIsZeroErr)
 		}
 
-		xRight = (xLeft*F(xRight) - xRight*F(xLeft))/deltaF
+		xRight = (xLeft*F.ApplyTo(xRight) - xRight*F.ApplyTo(xLeft))/deltaF
 		xLeft = xRightOld
 
 		iterationPassed++

@@ -3,19 +3,17 @@ package secantAuto
 import (
 	. "github.com/AndreyZWorkAccount/XIRR/netPresentValue"
 	. "github.com/AndreyZWorkAccount/XIRR/float.Extensions"
-	"github.com/AndreyZWorkAccount/XIRR/numMethods"
+	. "github.com/AndreyZWorkAccount/XIRR/numMethods"
 )
-
-type NumFunc = numMethods.NumericFunc
 
 type BordersSearchAlgorithm struct {
 
-	f NumFunc
+	f INumericFunc
 
-	derivativeF NumFunc
+	derivativeF INumericFunc
 }
 
-func NewBordersSearchAlgorithm(F NumFunc, dF NumFunc) BordersSearchAlgorithm{
+func NewBordersSearchAlgorithm(F INumericFunc, dF INumericFunc) BordersSearchAlgorithm{
 	return BordersSearchAlgorithm{f:F,derivativeF:dF}
 }
 
@@ -85,8 +83,8 @@ func (alg *BordersSearchAlgorithm) findInitialBorder(border Border,	tryLeft, try
 	xLeft := border.left
 	xRight := border.right
 
-	FxLeft := alg.f(border.left)
-	FxRight := alg.f(border.right)
+	FxLeft := alg.f.ApplyTo(border.left)
+	FxRight := alg.f.ApplyTo(border.right)
 
 	if AnyNanOrInfinity(FxLeft, FxRight){
 		return NoSolutionAndBreak()
@@ -105,8 +103,8 @@ func (alg *BordersSearchAlgorithm) findInitialBorder(border Border,	tryLeft, try
 		return NoSolutionAndContinue(Border{xLeft,xRight}, tryLeft, tryRight)
 	}
 
-	dFxLeft := alg.derivativeF(xLeft)
-	dFxRight := alg.derivativeF(xRight)
+	dFxLeft := alg.derivativeF.ApplyTo(xLeft)
+	dFxRight := alg.derivativeF.ApplyTo(xRight)
 
 	if (dFxLeft > 0 && dFxRight > 0) || (dFxLeft < 0 && dFxRight < 0){
 		ansBorder := Border{xLeft, xRight}
@@ -116,7 +114,7 @@ func (alg *BordersSearchAlgorithm) findInitialBorder(border Border,	tryLeft, try
 
 	//try to iterate from left to right
 	for left:=xLeft + Iteration_Step; left < xRight; left += Iteration_Step{
-		FLeft := alg.f(left)
+		FLeft := alg.f.ApplyTo(left)
 
 		if (FxLeft > 0 && FLeft > 0) || (FxLeft < 0 && FLeft < 0){
 			continue

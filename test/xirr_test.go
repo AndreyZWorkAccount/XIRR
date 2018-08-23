@@ -2,8 +2,9 @@ package test
 
 import (
 	. "testing"
-	. "github.com/AndreyZWorkAccount/XIRR/numMethods"
 	. "math"
+
+	. "github.com/AndreyZWorkAccount/XIRR/numMethods"
 	"github.com/AndreyZWorkAccount/XIRR/xirrCalclulation"
 )
 

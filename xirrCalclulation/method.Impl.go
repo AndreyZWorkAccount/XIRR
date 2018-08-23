@@ -1,12 +1,13 @@
 package xirrCalclulation
 
 import (
+	. "math"
+	"sort"
+
 	. "github.com/AndreyZWorkAccount/XIRR/numMethods"
 	. "github.com/AndreyZWorkAccount/XIRR/netPresentValue"
-	. "math"
 	"github.com/AndreyZWorkAccount/XIRR/newton"
 	"github.com/AndreyZWorkAccount/XIRR/secantAuto"
-	"sort"
 )
 
 //XIRR numeric method
@@ -37,11 +38,19 @@ func (method XIRRCalculationMethod) Calculate(payments []IPayment) (result float
 	startPaymentDate := payments[0].Date()
 
 	//NPV function
-	F := func(irr float64) float64{	return NetPresentValue(irr, payments, startPaymentDate, method.daysInYear)}
+	F := NumFunc(func(irr float64) float64{
+		return NetPresentValue(irr, payments, startPaymentDate, method.daysInYear)
+	})
+
 	//NPV derivative
-	derivativeF := func(irr float64) float64{ return NetPresentValueDerivative(irr, payments, startPaymentDate, method.daysInYear)}
+	derivativeF := NumFunc(func(irr float64) float64{
+		return NetPresentValueDerivative(irr, payments, startPaymentDate, method.daysInYear)
+	})
+
 	//NPV second derivative
-	secondDerivativeF := func(irr float64) float64{	return NetPresentValueSecondDerivative(irr, payments, startPaymentDate, method.daysInYear)}
+	secondDerivativeF := NumFunc(func(irr float64) float64{
+		return NetPresentValueSecondDerivative(irr, payments, startPaymentDate, method.daysInYear)
+	})
 
 	paymentsSumIsPositive := IsPaymentsSumPositive(payments)
 
@@ -84,15 +93,15 @@ func (method XIRRCalculationMethod) Calculate(payments []IPayment) (result float
 	return ErrorFound(&AllNumericMethodsHaveBeenFailed)
 }
 
-func tryNewton(guess float64, F, derivativeF NumericFunc, methodParams *NumericMethodParams, bestSolution Solution ) (canFinish bool, newBest Solution) {
+func tryNewton(guess float64, F, derivativeF INumericFunc, methodParams *NumericMethodParams, bestSolution Solution ) (canFinish bool, newBest Solution) {
 	newtonMethod := newton.NewMethod(guess)
 	xNewton, resType, _ := newtonMethod.Calculate(F,derivativeF,methodParams)
 	return updateBestSolution(xNewton, F, resType, bestSolution)
 }
 
-func updateBestSolution(x float64, F NumericFunc, resType NumericResultType, currentBest Solution) (canFinish bool, newBest Solution){
+func updateBestSolution(x float64, F INumericFunc, resType NumericResultType, currentBest Solution) (canFinish bool, newBest Solution){
 	if resType.IsSolution() {
-		bestSolution := bestSolutionOf(currentBest, Solution{x,F(x) })
+		bestSolution := bestSolutionOf(currentBest, Solution{x,F.ApplyTo(x) })
 		if closeEnough(IdealNPV, bestSolution.fx) {
 			return true, bestSolution
 		}
@@ -123,4 +132,3 @@ func IsPaymentsSumPositive(payments []IPayment) bool{
 type Solution struct {
 	x, fx float64
 }
-

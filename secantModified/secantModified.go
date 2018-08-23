@@ -2,6 +2,7 @@ package secantModified
 
 import (
 	. "math"
+
 	. "github.com/AndreyZWorkAccount/XIRR/numMethods"
 	. "github.com/AndreyZWorkAccount/XIRR/float.Extensions"
 )
@@ -20,11 +21,8 @@ func NewMethod(xLeft, xRight, minRateOfXDecrease float64) Method {
 }
 
 
-
-
-
 // NumericMethodUsingSecondDerivative interface implementation
-func (method *Method) Calculate(F NumericFunc, derivativeF NumericFunc, secondDerivativeF NumericFunc,
+func (method *Method) Calculate(F INumericFunc, derivativeF INumericFunc, secondDerivativeF INumericFunc,
 	methodParams *NumericMethodParams) (float64, NumericResultType, *NumericMethodError){
 
 	xLeft := method.xLeftInit
@@ -49,22 +47,22 @@ func (method *Method) Calculate(F NumericFunc, derivativeF NumericFunc, secondDe
 	return NoSolutionFound()
 }
 
-func (method *Method) runIteration(xLeft float64, xRight float64, isConvergesOnLeft bool, methodParams *NumericMethodParams, F NumericFunc, derivativeF NumericFunc, secondDerivativeF NumericFunc)(xLeftOut float64, xRightOut float64, solutionFound bool,err *NumericMethodError ) {
+func (method *Method) runIteration(xLeft float64, xRight float64, isConvergesOnLeft bool, methodParams *NumericMethodParams, F INumericFunc, derivativeF INumericFunc, secondDerivativeF INumericFunc)(xLeftOut float64, xRightOut float64, solutionFound bool,err *NumericMethodError ) {
 	prevIterationDx := Abs(xRight - xLeft)
 
-	FxRight := F(xRight)
-	FxLeft := F(xLeft)
+	FxRight := F.ApplyTo(xRight)
+	FxLeft := F.ApplyTo(xLeft)
 
 	if AnyNanOrInfinity(FxLeft,FxRight){
 		return xLeft, xRight, false, FunctionValueIsNanOrInfinityErr
 	}
 
 	if isConvergesOnLeft {
-		dFxLeft := derivativeF(xLeft)
+		dFxLeft := derivativeF.ApplyTo(xLeft)
 		xRight = xRight - ((xRight - xLeft)/(FxRight - FxLeft))*FxRight
 		xLeft = xLeft - FxLeft/dFxLeft
 	} else {
-		dFxRight := derivativeF(xRight)
+		dFxRight := derivativeF.ApplyTo(xRight)
 		xRight = xRight - FxRight/dFxRight
 		xLeft = xLeft - ((xRight - xLeft)/(FxRight - FxLeft))*FxLeft
 	}
@@ -76,7 +74,7 @@ func (method *Method) runIteration(xLeft float64, xRight float64, isConvergesOnL
 
 	if Abs(dx - prevIterationDx) < method.minimumRateOfXDecrease{
 		xAvg := Average(xLeft,xRight)
-		FxAvg := F(xAvg)
+		FxAvg := F.ApplyTo(xAvg)
 		if (FxLeft < 0 && FxAvg > 0) || (FxLeft > 0 && FxAvg < 0){
 			xRight = xAvg
 		} else {
@@ -87,9 +85,9 @@ func (method *Method) runIteration(xLeft float64, xRight float64, isConvergesOnL
 	return xLeft, xRight, false, nil
 }
 
-func isConvergesOnLeft(xLeft float64, F NumericFunc, secondDerivativeF NumericFunc ) (bool){
-	FxLeft := F(xLeft)
-	ddFxLeft := secondDerivativeF(xLeft)
+func isConvergesOnLeft(xLeft float64, F INumericFunc, secondDerivativeF INumericFunc ) (bool){
+	FxLeft := F.ApplyTo(xLeft)
+	ddFxLeft := secondDerivativeF.ApplyTo(xLeft)
 	if (FxLeft <= 0 && ddFxLeft <= 0) || (FxLeft >= 0 && ddFxLeft >= 0) {
 		return true
 	}

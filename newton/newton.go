@@ -2,6 +2,7 @@ package newton
 
 import (
 	. "math"
+
 	. "github.com/AndreyZWorkAccount/XIRR/numMethods"
 )
 
@@ -15,15 +16,15 @@ func NewMethod(guess float64) Method{
 
 
 // NumericMethodUsingDerivative interface implementation
-func (nm *Method) Calculate(F NumericFunc, derivativeF NumericFunc, methodParams *NumericMethodParams) (float64, NumericResultType, *NumericMethodError) {
+func (nm *Method) Calculate(F INumericFunc, derivativeF INumericFunc, methodParams *NumericMethodParams) (float64, NumericResultType, *NumericMethodError) {
 
 	xCurrent := nm.initialGuess
 
 	var iterationPassed  uint64 = 0
 	for iterationPassed < methodParams.MaxIterationsCount {
 
-		fValue := F(xCurrent)
-		fDerivativeValue := derivativeF(xCurrent)
+		fValue := F.ApplyTo(xCurrent)
+		fDerivativeValue := derivativeF.ApplyTo(xCurrent)
 
 		xNext := xCurrent - fValue/fDerivativeValue
 

@@ -23,7 +23,7 @@ func NewMethod(paymentsSumIsPositive bool, searchAlg IBordersSearchAlgorithm, mi
 
 
 // NumericMethodUsingSecondDerivative interface implementation
-func (method *Method) Calculate(F NumericFunc, derivativeF NumericFunc, secondDerivativeF NumericFunc,
+func (method *Method) Calculate(F INumericFunc, derivativeF INumericFunc, secondDerivativeF INumericFunc,
 	methodParams *NumericMethodParams) (float64, NumericResultType, *NumericMethodError){
 
 		borders := method.bordersSearchAlg.FindInitialBorders(method.paymentsSumIsPositive)

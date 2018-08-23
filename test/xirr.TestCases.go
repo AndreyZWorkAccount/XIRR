@@ -1,8 +1,9 @@
 package test
 
 import (
-	. "github.com/AndreyZWorkAccount/XIRR/netPresentValue"
 	. "time"
+
+	. "github.com/AndreyZWorkAccount/XIRR/netPresentValue"
 )
 
 type TestCase struct {
