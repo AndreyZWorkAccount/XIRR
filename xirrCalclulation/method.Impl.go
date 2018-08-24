@@ -6,7 +6,6 @@ package xirrCalclulation
 
 import (
 	. "math"
-	"sort"
 
 	. "github.com/AndreyZWorkAccount/XIRR/numMethods"
 	. "github.com/AndreyZWorkAccount/XIRR/netPresentValue"
@@ -15,7 +14,7 @@ import (
 )
 
 //XIRR numeric method
-type XIRRCalculationMethod struct {
+type XIRRMethod struct {
 
 	daysInYear uint16
 
@@ -24,39 +23,38 @@ type XIRRCalculationMethod struct {
 	minRateOfIrrDecrease float64
 }
 
-func NewMethod( minRateOfIrr float64, daysInYear uint16, methodParams *NumericMethodParams) XIRRCalculationMethod{
-	return XIRRCalculationMethod{  daysInYear, methodParams, minRateOfIrr}
+func NewXIRRMethod( minRateOfIrr float64, daysInYear uint16, methodParams *NumericMethodParams) XIRRMethod{
+	return XIRRMethod{  daysInYear, methodParams, minRateOfIrr}
 }
 
 
 
 //XIRRCalcMethod implementation
-func (method XIRRCalculationMethod) Calculate(payments []IPayment) (result float64, resultType NumericResultType, error *NumericMethodError) {
+func (method XIRRMethod) Calculate(payments IOrderedPayments) (result float64, resultType NumericResultType, error *NumericMethodError) {
 
-	if len(payments) == 0 {
+	if payments.Count() == 0 {
 		return NoSolutionFound()
 	}
 
-	//order payments by date
-	sort.Slice(payments, func(i,j int) bool { return payments[i].Before(payments[j]) })
-	startPaymentDate := payments[0].Date()
+	allPayments := payments.GetAll()
+	startPaymentDate := allPayments[0].Date()
 
 	//NPV function
 	F := NumFunc(func(irr float64) float64{
-		return NetPresentValue(irr, payments, startPaymentDate, method.daysInYear)
+		return NetPresentValue(irr, allPayments, startPaymentDate, method.daysInYear)
 	})
 
 	//NPV derivative
 	derivativeF := NumFunc(func(irr float64) float64{
-		return NetPresentValueDerivative(irr, payments, startPaymentDate, method.daysInYear)
+		return NetPresentValueDerivative(irr, allPayments, startPaymentDate, method.daysInYear)
 	})
 
 	//NPV second derivative
 	secondDerivativeF := NumFunc(func(irr float64) float64{
-		return NetPresentValueSecondDerivative(irr, payments, startPaymentDate, method.daysInYear)
+		return NetPresentValueSecondDerivative(irr, allPayments, startPaymentDate, method.daysInYear)
 	})
 
-	paymentsSumIsPositive := IsPaymentsSumPositive(payments)
+	paymentsSumIsPositive := IsPaymentsSumPositive(allPayments)
 
 	bestSolution := Solution{x:Inf(1), fx:Inf(1)}
 

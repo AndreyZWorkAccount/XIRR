@@ -16,8 +16,10 @@ func TestIrr(t *T){
 	methodParams := NumericMethodParams{MaxIterationsCount: 1000,Epsilon:0.0000001}
 
 	for _,testCase := range TestCases{
-		var xirrCalcMethod = xirrCalclulation.NewMethod( 0.00000001, 365, &methodParams )
-		res, resType, err := xirrCalcMethod.Calculate(testCase.Payments)
+		var xirrCalcMethod = xirrCalclulation.NewXIRRMethod( 0.00000001, 365, &methodParams )
+
+		var orderedPayments = xirrCalclulation.OrderPayments(testCase.Payments)
+		res, resType, err := xirrCalcMethod.Calculate(orderedPayments)
 
 		if !resType.IsSolution(){
 			t.Error("Successful solution is expected.")
@@ -25,7 +27,7 @@ func TestIrr(t *T){
 		if err != nil{
 			t.Error(err)
 		}
-		if Abs(res - testCase.ExpectedValue) > 0.0000001{
+		if Abs(res - testCase.ExpectedValue) > 0.0000000001{
 			t.Errorf("Expected: %v\n. Actual: %v\n", testCase.ExpectedValue, res)
 		}
 	}

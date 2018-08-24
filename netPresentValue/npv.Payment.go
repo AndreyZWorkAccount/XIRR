@@ -36,3 +36,7 @@ func (p *Payment) Before( s IPayment) bool{
 func (p *Payment) After( s IPayment) bool{
 	return p._date.After(*s.Date())
 }
+
+func (p *Payment) SameDateAs(s IPayment) bool{
+	return p._date.Equal(*s.Date())
+}

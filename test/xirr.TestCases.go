@@ -19,14 +19,14 @@ var TestCases = []TestCase{
 
 	TestCase{
 		Payments:[]IPayment{
+			NewPayment(1000000.00, OnDate(30, April,2016)),
 			NewPayment(-2937480.00, OnDate(1, January,2016)),
 			NewPayment(-28000000.00, OnDate(1, April,2016)),
 			NewPayment(28837484.00, OnDate(15, April,2016)),
-			NewPayment(372384.00, OnDate(20, April,2016)),
 			NewPayment(1029877.00, OnDate(23, April,2016)),
-			NewPayment(1000000.00, OnDate(30, April,2016)),
+			NewPayment(372384.00, OnDate(20, April,2016)),
 		},
-		ExpectedValue: 0.162341112},
+		ExpectedValue: 0.1623411031457017},
 
 	TestCase{
 		Payments: []IPayment{
@@ -34,7 +34,7 @@ var TestCases = []TestCase{
 			NewPayment(710, OnDate(26,August,2000 )),
 			NewPayment(693, OnDate(11,July,2001 )),
 		},
-		ExpectedValue:-0.945697010494769},
+		ExpectedValue:-0.9456970110868315},
 
 	TestCase{
 		Payments:[]IPayment{
@@ -45,13 +45,13 @@ var TestCases = []TestCase{
 			NewPayment(1029877.00, OnDate(23, April,2016)),
 			NewPayment(1000000.00, OnDate(30, April,2016)),
 		},
-		ExpectedValue: 0.162341112},
+		ExpectedValue: 0.1623411031457017},
 
 	TestCase{
 		Payments: []IPayment{
+			NewPayment(20, OnDate(1, January ,2014)),
 			NewPayment(-100, OnDate(1, January,2012)),
 			NewPayment(10, OnDate(1, January,2013)),
-			NewPayment(20, OnDate(1, January ,2014)),
 			NewPayment(30, OnDate(1, January,2015)),
 		},
 		ExpectedValue: -0.1922001575},
@@ -90,9 +90,9 @@ var TestCases = []TestCase{
 	TestCase{
 		Payments: []IPayment{
 			NewPayment(-123400,OnDate(1,January,2012)),
+			NewPayment(48100,OnDate(1,January,2015)),
 			NewPayment(36200,OnDate(1,January,2013)),
 			NewPayment(54800,OnDate(1,January,2014)),
-			NewPayment(48100,OnDate(1,January,2015)),
 		},
 		ExpectedValue: 0.0595345222},
 
@@ -124,7 +124,7 @@ var TestCases = []TestCase{
 			NewPayment(500,OnDate(22,October,2015)),
 			NewPayment(-800,OnDate(23,October,2015)),
 		},
-		ExpectedValue: 0.38751143},
+		ExpectedValue: 0.3875114316258743},
 
 	TestCase{
 		Payments: []IPayment{
@@ -132,7 +132,7 @@ var TestCases = []TestCase{
 			NewPayment(-111,OnDate(11,September,2000)),
 			NewPayment(1859,OnDate(30,June,2001)),
 		},
-		ExpectedValue: -0.73747226819396},
+		ExpectedValue: -0.7374722671574048},
 
 	TestCase{
 		Payments: []IPayment{
@@ -153,16 +153,16 @@ var TestCases = []TestCase{
 			NewPayment(630, OnDate(1,October,2011 )),
 			NewPayment(-489, OnDate(22,August,2012 )),
 		},
-		ExpectedValue:-0.129823622107506},
+		ExpectedValue:-0.12982362249643103},
 
 	TestCase{
 		Payments: []IPayment{
 			NewPayment(-2769,OnDate(1,January,2000)),
-			NewPayment(1642,OnDate(14,June,2000)),
 			NewPayment(1811,OnDate(21,September,2000)),
+			NewPayment(1642,OnDate(14,June,2000)),
 			NewPayment(1898,OnDate(30,December,2001)),
 		},
-		ExpectedValue: 1.00320521593094},
+		ExpectedValue: 1.0032052076959754},
 
 	TestCase{
 		Payments: []IPayment{
@@ -180,21 +180,21 @@ var TestCases = []TestCase{
 			NewPayment(462,OnDate(15,August,2012)),
 			NewPayment(194,OnDate(3,July,2014)),
 		},
-		ExpectedValue: 0.865619027614594},
+		ExpectedValue: 0.8656190240806798},
 
 	TestCase{
 		Payments: []IPayment{
-			NewPayment(-10773,OnDate(1,January,2000)),
 			NewPayment(1920,OnDate(1,February,2000)),
+			NewPayment(-10773,OnDate(1,January,2000)),
 			NewPayment(1198,OnDate(22,February,2001)),
 		},
-		ExpectedValue: -0.82026396356523},
+		ExpectedValue: -0.8202639662898871},
 
 	TestCase{
 		Payments: []IPayment{
 			NewPayment(-1285,OnDate(1,January,2000)),
 			NewPayment(556,OnDate(17,July,2000)),},
-		ExpectedValue: -0.786544985324144},
+		ExpectedValue: -0.7865449910261024},
 
 	TestCase{
 		Payments: []IPayment{
@@ -205,7 +205,7 @@ var TestCases = []TestCase{
 			NewPayment(1848, OnDate(20,March,2005 )),
 			NewPayment(433, OnDate(29,September,2005 )),
 		},
-		ExpectedValue: -0.173476189374924},
+		ExpectedValue: -0.17347618547013388},
 
 	TestCase{
 		Payments: []IPayment{
@@ -217,7 +217,7 @@ var TestCases = []TestCase{
 			NewPayment(-228, OnDate(9,August,2005 )),
 			NewPayment(1541, OnDate(14,July,2007 )),
 		},
-		ExpectedValue:-0.162215143442154},
+		ExpectedValue:-0.16221514453356106},
 
 	TestCase{
 		Payments: []IPayment{
@@ -227,20 +227,20 @@ var TestCases = []TestCase{
 			NewPayment(1828, OnDate(18,January,2004 )),
 			NewPayment(660, OnDate(30,April,2005 )),
 		},
-		ExpectedValue:-0.140754598379135},
+		ExpectedValue:-0.14075459394958345},
 
 	TestCase{
 		Payments: []IPayment{
 			NewPayment(-8866, OnDate(1,January,2000 )),
+			NewPayment(72, OnDate(22,May,2002 )),
 			NewPayment(757, OnDate(10,October,2000 )),
 			NewPayment(560, OnDate(10,August,2001 )),
-			NewPayment(72, OnDate(22,May,2002 )),
-			NewPayment(203, OnDate(23,March,2003 )),
 			NewPayment(-270, OnDate(27,November,2004 )),
+			NewPayment(203, OnDate(23,March,2003 )),
 			NewPayment(1714, OnDate(15,June,2006 )),
 			NewPayment(715, OnDate(14,September,2007 )),
 		},
-		ExpectedValue:-0.150553891062737},
+		ExpectedValue:-0.15055389256088803},
 
 	TestCase{
 		Payments: []IPayment{
@@ -253,9 +253,8 @@ var TestCases = []TestCase{
 			NewPayment(500, OnDate(6,June,2005 )),
 			NewPayment(-2, OnDate(18,August,2006 )),
 		},
-		ExpectedValue: 0.21172166466713,
+		ExpectedValue: 0.21172166842038695,
 	},
-
 
 }
 

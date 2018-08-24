@@ -20,6 +20,9 @@ type IPayment interface {
 
 	//True if current payment is after p
 	After(p IPayment) bool
+
+	//True if current payment is at the sane date as p
+	SameDateAs(p IPayment) bool
 }
 
 
