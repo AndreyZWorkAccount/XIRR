@@ -9,8 +9,8 @@ import (
 )
 
 type NumericMethodError struct {
-	Description string
+	description string
 }
 func (e *NumericMethodError) Error() string {
-	return Sprintf("The numerical method has been terminated: %v.", e.Description)
+	return Sprintf("The numerical method has been terminated: %v.", e.description)
 }

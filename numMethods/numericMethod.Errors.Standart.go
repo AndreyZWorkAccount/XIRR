@@ -10,6 +10,8 @@ var FunctionValueIsNanOrInfinityErr = error(functionValueIsNanOrInfinity)
 
 var FunctionHasNoSolutionInIntervalErr = error(functionHasNoSolutionInInterval)
 
+var AllNumericMethodsHaveBeenFailed = error(allNumericMethodsHaveBeenFailed)
+
 
 
 func error(description string) *NumericMethodError{

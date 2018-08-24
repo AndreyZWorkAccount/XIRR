@@ -23,7 +23,7 @@ func TestIrr(t *T){
 			t.Error("Successful solution is expected.")
 		}
 		if err != nil{
-			t.Error(err.Description)
+			t.Error(err)
 		}
 		if Abs(res - testCase.ExpectedValue) > 0.0000001{
 			t.Errorf("Expected: %v\n. Actual: %v\n", testCase.ExpectedValue, res)

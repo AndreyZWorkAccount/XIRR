@@ -94,7 +94,7 @@ func (method XIRRCalculationMethod) Calculate(payments []IPayment) (result float
 		}
 	}
 
-	return ErrorFound(&AllNumericMethodsHaveBeenFailed)
+	return ErrorFound(AllNumericMethodsHaveBeenFailed)
 }
 
 func tryNewton(guess float64, F, derivativeF INumericFunc, methodParams *NumericMethodParams, bestSolution Solution ) (canFinish bool, newBest Solution) {
