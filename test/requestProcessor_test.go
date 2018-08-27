@@ -9,15 +9,13 @@ import (
 	"time"
 )
 
-
-func TestRequestProcessor(t *T){
-	var coresCount int = 50000;
+func TestRequestProcessorStartAndStop(t *T){
+	var coresCount int = 50000
 	var timeout time.Duration = 1*time.Second
 
 	initialGoroutinesCount := runtime.NumGoroutine()
 
 	var processor xirrAsync.IProcessor = xirrAsync.NewProcessor()
-
 	processor.Start(coresCount)
 
 	if runtime.NumGoroutine() - initialGoroutinesCount != coresCount{
@@ -27,14 +25,15 @@ func TestRequestProcessor(t *T){
 	for{
 		select {
 
-		case success := <- processor.Stop():
-			if success{
-				if runtime.NumGoroutine() != initialGoroutinesCount{
-					t.Error("XIRR processor has been stopped, but goroutines are still running.")
-				}
-			}else {
+		case isOk := <- processor.Stop():
+			if !isOk{
 				t.Error("Can't stop XIRR processor.")
+				return
 			}
+			if runtime.NumGoroutine() != initialGoroutinesCount{
+				t.Error("XIRR processor has been stopped, but goroutines are still running.")
+				return
+		    }
 		return
 
 		case <- time.After(timeout):
@@ -43,5 +42,4 @@ func TestRequestProcessor(t *T){
 
 		}
 	}
-
 }

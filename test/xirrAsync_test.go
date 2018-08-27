@@ -7,11 +7,11 @@ import (
 
 	"github.com/AndreyZWorkAccount/XIRR/xirrAsync"
 	"github.com/AndreyZWorkAccount/XIRR/numMethods"
+	"sync"
 	)
 
-func TestAsyncIrr_ExecuteAsSync(t *T){
-	var coresCount int = 5;
-
+func TestAsyncIrr_OneRequestInChan(t *T){
+	var coresCount int = 5
 	var processor xirrAsync.IProcessor = xirrAsync.NewProcessor()
 	processor.Start(coresCount)
 
@@ -20,14 +20,46 @@ func TestAsyncIrr_ExecuteAsSync(t *T){
 
 	for id,testCase := range TestCases{
 		requests <- xirrAsync.NewRequest(int64(id), testCase.Payments)
-		res := <- responses
-
-		verifyTestResult(res.Result(), testCase.ExpectedValue, t)
+		resp := <- responses
+		verifyTestResult(resp.Result(), testCase.ExpectedValue, t)
 	}
 }
 
+func TestAsyncIrr_ManyRequestsInChan(t *T){
+	var coresCount int = 5
+	var processor xirrAsync.IProcessor = xirrAsync.NewProcessor()
+	processor.Start(coresCount)
+
+	requests := processor.Requests()
+	responses := processor.Responses()
+
+	testCases := make(map[int] TestCase);
+	for i,t := range TestCases{ testCases[i] = t}
+
+	wg := sync.WaitGroup{}
+
+	for id,testCase := range testCases{
+		requests <- xirrAsync.NewRequest(int64(id), testCase.Payments)
+
+		go func() {
+			wg.Add(1)
+			defer wg.Done()
+
+			resp := <- responses
+			expected := testCases[int(resp.RequestId())].ExpectedValue
+			verifyTestResult(resp.Result(), expected, t)
+		}()
+	}
+
+	wg.Wait()
+}
+
+
+
+
 
 func verifyTestResult(res numMethods.IResult, expectedValue float64, t *T) {
+
 	if !res.IsSolution() {
 		t.Error("Successful solution is expected.")
 	}
