@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-package xirrCalclulation
+package xirr
 
 import (
 	. "math"
@@ -41,17 +41,17 @@ func (method XIRRMethod) Calculate(payments IOrderedPayments) (result float64, r
 
 	//NPV function
 	F := NumFunc(func(irr float64) float64{
-		return NetPresentValue(irr, allPayments, startPaymentDate, method.daysInYear)
+		return NPV(irr, allPayments, startPaymentDate, method.daysInYear)
 	})
 
 	//NPV derivative
 	derivativeF := NumFunc(func(irr float64) float64{
-		return NetPresentValueDerivative(irr, allPayments, startPaymentDate, method.daysInYear)
+		return NPVDerivative(irr, allPayments, startPaymentDate, method.daysInYear)
 	})
 
 	//NPV second derivative
 	secondDerivativeF := NumFunc(func(irr float64) float64{
-		return NetPresentValueSecondDerivative(irr, allPayments, startPaymentDate, method.daysInYear)
+		return NPVSecondDerivative(irr, allPayments, startPaymentDate, method.daysInYear)
 	})
 
 	paymentsSumIsPositive := IsPaymentsSumPositive(allPayments)

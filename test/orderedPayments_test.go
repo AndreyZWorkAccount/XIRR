@@ -3,13 +3,13 @@ package test
 import (
 	. "testing"
 
-	"github.com/AndreyZWorkAccount/XIRR/xirrCalclulation"
+	"github.com/AndreyZWorkAccount/XIRR/xirr"
 )
 
 func TestNewOrderedPayments(t *T) {
 
 	for _,testCase := range TestCases{
-		orderedPayments := xirrCalclulation.OrderPayments(testCase.Payments)
+		orderedPayments := xirr.OrderPayments(testCase.Payments)
 
 		allPayments := orderedPayments.GetAll()
 

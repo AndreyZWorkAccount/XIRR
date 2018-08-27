@@ -1,4 +1,4 @@
-package xirrCalclulation
+package xirr
 
 import (
 	"sort"

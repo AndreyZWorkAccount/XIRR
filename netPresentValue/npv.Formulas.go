@@ -11,8 +11,8 @@ import (
 	. "github.com/AndreyZWorkAccount/XIRR/time.Extensions"
 )
 
-//NPV
-func NetPresentValue(irrValue float64, payments []IPayment, firstPaymentDate *Time, daysInYear uint16 ) float64{
+//NetPresentValue
+func NPV(irrValue float64, payments []IPayment, firstPaymentDate *Time, daysInYear uint16 ) float64{
 	if irrValue <= IrrMinValue{ irrValue = IrrDefaultValue }
 
 	daysInYearF := float64(daysInYear)
@@ -23,8 +23,8 @@ func NetPresentValue(irrValue float64, payments []IPayment, firstPaymentDate *Ti
 	}
 	return npv
 }
-//NPV derivative
-func NetPresentValueDerivative(irrValue float64, payments []IPayment, firstPaymentDate *Time, daysInYear uint16 ) float64{
+//NetPresentValue derivative
+func NPVDerivative(irrValue float64, payments []IPayment, firstPaymentDate *Time, daysInYear uint16 ) float64{
 	if irrValue <= IrrMinValue{ irrValue = IrrDefaultValue }
 
 	daysInYearF := float64(daysInYear)
@@ -35,8 +35,8 @@ func NetPresentValueDerivative(irrValue float64, payments []IPayment, firstPayme
 	}
 	return npv
 }
-//NPV second derivative
-func NetPresentValueSecondDerivative(irrValue float64, payments []IPayment, firstPaymentDate *Time, daysInYear uint16 ) float64{
+//NetPresentValue second derivative
+func NPVSecondDerivative(irrValue float64, payments []IPayment, firstPaymentDate *Time, daysInYear uint16 ) float64{
 	if irrValue <= IrrMinValue{ irrValue = IrrDefaultValue }
 
 	daysInYearF := float64(daysInYear)
