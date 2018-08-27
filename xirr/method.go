@@ -4,11 +4,9 @@
 
 package xirr
 
-import (
-		. "github.com/AndreyZWorkAccount/XIRR/numMethods"
-)
+import . "github.com/AndreyZWorkAccount/XIRR/numMethods"
 
 
-type XIRRCalcMethod interface {
-	Calculate(payments IOrderedPayments) (result float64, resultType NumericResultType, error *NumericMethodError)
+type CalcMethod interface {
+	Calculate(payments IOrderedPayments) IResult
 }

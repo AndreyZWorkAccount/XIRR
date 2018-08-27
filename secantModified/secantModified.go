@@ -26,8 +26,7 @@ func NewMethod(xLeft, xRight, minRateOfXDecrease float64) Method {
 
 
 // NumericMethodUsingSecondDerivative interface implementation
-func (method *Method) Calculate(F INumericFunc, derivativeF INumericFunc, secondDerivativeF INumericFunc,
-	methodParams *NumericMethodParams) (float64, NumericResultType, *NumericMethodError){
+func (method *Method) Calculate(F INumericFunc, derivativeF INumericFunc, secondDerivativeF INumericFunc, methodParams *Params) IResult{
 
 	xLeft := method.xLeftInit
 	xRight := method.xRightInit
@@ -51,7 +50,7 @@ func (method *Method) Calculate(F INumericFunc, derivativeF INumericFunc, second
 	return NoSolutionFound()
 }
 
-func (method *Method) runIteration(xLeft float64, xRight float64, isConvergesOnLeft bool, methodParams *NumericMethodParams, F INumericFunc, derivativeF INumericFunc, secondDerivativeF INumericFunc)(xLeftOut float64, xRightOut float64, solutionFound bool,err *NumericMethodError ) {
+func (method *Method) runIteration(xLeft float64, xRight float64, isConvergesOnLeft bool, methodParams *Params, F INumericFunc, derivativeF INumericFunc, secondDerivativeF INumericFunc)(xLeftOut float64, xRightOut float64, solutionFound bool,err *NumericMethodError ) {
 	prevIterationDx := Abs(xRight - xLeft)
 
 	FxRight := F.ApplyTo(xRight)

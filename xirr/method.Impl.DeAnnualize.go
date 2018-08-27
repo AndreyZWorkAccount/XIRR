@@ -12,27 +12,26 @@ type XIRRDeAnnualizeMethod struct {
 	XIRRMethod
 }
 
-func NewXIRRDeAnnualizeMethod( minRateOfIrr float64, daysInYear uint16, methodParams *NumericMethodParams) XIRRDeAnnualizeMethod{
+func NewXIRRDeAnnualizeMethod( minRateOfIrr float64, daysInYear uint16, methodParams *Params) XIRRDeAnnualizeMethod{
 	return XIRRDeAnnualizeMethod{XIRRMethod{daysInYear, methodParams, minRateOfIrr}}
 }
 
 
 
 //XIRRCalcMethod implementation
-func (method XIRRDeAnnualizeMethod) Calculate(payments IOrderedPayments) (result float64, resultType NumericResultType, error *NumericMethodError) {
+func (method XIRRDeAnnualizeMethod) Calculate(payments IOrderedPayments) IResult {
 
 	if payments.Count() == 0 {
 		return NoSolutionFound()
 	}
 
-	res, resType, err := method.XIRRMethod.Calculate(payments)
-
-	if err != nil || !resType.IsSolution(){
-		return res, resType, err
+	res := method.XIRRMethod.Calculate(payments)
+	if res.Error != nil || !res.IsSolution(){
+		return res
 	}
 
 	//deannualize if solution found
-	return method.deAnnualize(res, payments), NumericResultType_HasSolution, nil
+	return SolutionFound( method.deAnnualize(res.Value(), payments))
 }
 
 func (method XIRRDeAnnualizeMethod) deAnnualize(res float64, payments IOrderedPayments) (result float64) {

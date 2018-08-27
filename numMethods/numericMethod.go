@@ -6,29 +6,29 @@ package numMethods
 
 //type to represent a numeric method
 type NumericMethod interface {
-	Calculate(F INumericFunc, methodParams *NumericMethodParams) (float64, NumericResultType, *NumericMethodError)
+	Calculate(F INumericFunc, methodParams *Params) IResult
 }
 
 //type to represent a numeric method using derivative of function
 type NumericMethodUsingDerivative interface {
-	Calculate(F INumericFunc, derivativeF INumericFunc, methodParams *NumericMethodParams) (float64, NumericResultType, *NumericMethodError)
+	Calculate(F INumericFunc, derivativeF INumericFunc, methodParams *Params) IResult
 }
 
 //type to a numeric method using second derivative of function
 type NumericMethodUsingSecondDerivative interface {
-	Calculate(F INumericFunc, derivativeF INumericFunc, secondDerivativeF INumericFunc, methodParams *NumericMethodParams) (float64, NumericResultType, *NumericMethodError)
+	Calculate(F INumericFunc, derivativeF INumericFunc, secondDerivativeF INumericFunc, methodParams *Params) IResult
 }
 
-// parameters of numeric methods
-type NumericMethodParams struct {
 
+
+
+// parameters of numeric methods
+type Params struct {
 	// max count of method iterations
 	MaxIterationsCount uint64
-
 	// acceptable calculation error
 	Epsilon float64
 }
-
 
 // type to represent status of calculations
 type NumericResultType int

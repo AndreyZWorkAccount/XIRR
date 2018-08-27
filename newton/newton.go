@@ -20,7 +20,7 @@ func NewMethod(guess float64) Method{
 
 
 // NumericMethodUsingDerivative interface implementation
-func (nm *Method) Calculate(F INumericFunc, derivativeF INumericFunc, methodParams *NumericMethodParams) (float64, NumericResultType, *NumericMethodError) {
+func (nm *Method) Calculate(F INumericFunc, derivativeF INumericFunc, methodParams *Params) IResult {
 
 	xCurrent := nm.initialGuess
 

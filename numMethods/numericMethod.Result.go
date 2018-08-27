@@ -4,30 +4,37 @@
 
 package numMethods
 
-
-
-func ErrorFound(err *NumericMethodError) (result float64, resultType NumericResultType, error *NumericMethodError){
-	result = 0
-	resultType = NumericResultType_NoSolution
-	error = err
-	return
+type IResult interface {
+	Value() float64
+	IsSolution()  bool
+	Error() *NumericMethodError
 }
 
-func NoSolutionFound() (result float64, resultType NumericResultType, error *NumericMethodError){
-	result = 0
-	resultType = NumericResultType_NoSolution
-	error = nil
-	return
+func ErrorFound(err *NumericMethodError) IResult{
+	return &resultImpl{0, NumericResultType_NoSolution, err}
 }
 
-func SolutionFound(res float64) (result float64, resultType NumericResultType, error *NumericMethodError){
-	result = res
-	resultType = NumericResultType_HasSolution
-	error = nil
-	return
+func NoSolutionFound() IResult{
+	return &resultImpl{0, NumericResultType_NoSolution, nil}
+}
+
+func SolutionFound(res float64) IResult{
+	return &resultImpl{res, NumericResultType_HasSolution, nil }
 }
 
 
-func (resType *NumericResultType) IsSolution() bool{
-	return *resType == NumericResultType_HasSolution
+//Result impl
+type resultImpl struct {
+	value float64
+	valueType  NumericResultType
+	error *NumericMethodError
+}
+func (r *resultImpl) Value() float64{
+	return r.value
+}
+func (r *resultImpl) IsSolution()  bool{
+	return r.valueType == NumericResultType_HasSolution
+}
+func (r *resultImpl) Error() *NumericMethodError{
+	return r.error
 }

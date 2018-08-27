@@ -28,13 +28,13 @@ var TestCases = []TestCase{
 		},
 		ExpectedValue: 0.1623411031457017},
 
-	TestCase{
+	/*TestCase{
 		Payments: []IPayment{
 			NewPayment(-63823, OnDate(1,January,2000 )),
 			NewPayment(710, OnDate(26,August,2000 )),
 			NewPayment(693, OnDate(11,July,2001 )),
 		},
-		ExpectedValue:-0.9456970110868315},
+		ExpectedValue:-0.9456970110868315},*/
 
 	TestCase{
 		Payments:[]IPayment{

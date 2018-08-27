@@ -21,7 +21,7 @@ func NewMethod(xLeft, xRight float64) Method{
 
 
 // NumericMethod interface implementation
-func (s *Method) Calculate(F INumericFunc, methodParams *NumericMethodParams) (float64, NumericResultType, *NumericMethodError){
+func (s *Method) Calculate(F INumericFunc, methodParams *Params) Result{
 	xLeft := s.xLeftInit
 	xRight := s.xRightInit
 

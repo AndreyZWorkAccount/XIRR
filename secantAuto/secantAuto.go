@@ -27,18 +27,17 @@ func NewMethod(paymentsSumIsPositive bool, searchAlg IBordersSearchAlgorithm, mi
 
 
 // NumericMethodUsingSecondDerivative interface implementation
-func (method *Method) Calculate(F INumericFunc, derivativeF INumericFunc, secondDerivativeF INumericFunc,
-	methodParams *NumericMethodParams) (float64, NumericResultType, *NumericMethodError){
+func (method *Method) Calculate(F INumericFunc, derivativeF INumericFunc, secondDerivativeF INumericFunc, methodParams *Params) IResult{
 
 		borders := method.bordersSearchAlg.FindInitialBorders(method.paymentsSumIsPositive)
 
 		//iterate over borders and return first successful result
 		for _, border := range borders{
 			secantModified := secantModified.NewMethod(border.Left(), border.Right(), method.minimumRateOfXDecrease)
-			ans, resType, _ := secantModified.Calculate(F,derivativeF,secondDerivativeF,methodParams)
+			ans := secantModified.Calculate(F,derivativeF,secondDerivativeF,methodParams)
 
-			if resType.IsSolution(){
-				return SolutionFound(ans)
+			if ans.IsSolution(){
+				return ans
 			}
 		}
 		return NoSolutionFound()

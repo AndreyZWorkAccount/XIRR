@@ -11,26 +11,26 @@ import (
 	. "github.com/AndreyZWorkAccount/XIRR/netPresentValue"
 	"github.com/AndreyZWorkAccount/XIRR/newton"
 	"github.com/AndreyZWorkAccount/XIRR/secantAuto"
-)
+	)
 
 //XIRR numeric method
 type XIRRMethod struct {
 
 	daysInYear uint16
 
-	params *NumericMethodParams
+	params *Params
 
 	minRateOfIrrDecrease float64
 }
 
-func NewXIRRMethod( minRateOfIrr float64, daysInYear uint16, methodParams *NumericMethodParams) XIRRMethod{
+func NewXIRRMethod( minRateOfIrr float64, daysInYear uint16, methodParams *Params) XIRRMethod{
 	return XIRRMethod{  daysInYear, methodParams, minRateOfIrr}
 }
 
 
 
 //XIRRCalcMethod implementation
-func (method XIRRMethod) Calculate(payments IOrderedPayments) (result float64, resultType NumericResultType, error *NumericMethodError) {
+func (method XIRRMethod) Calculate(payments IOrderedPayments) IResult {
 
 	if payments.Count() == 0 {
 		return NoSolutionFound()
@@ -56,14 +56,14 @@ func (method XIRRMethod) Calculate(payments IOrderedPayments) (result float64, r
 
 	paymentsSumIsPositive := IsPaymentsSumPositive(allPayments)
 
-	bestSolution := Solution{x:Inf(1), fx:Inf(1)}
+	bestSolution := solution{x:Inf(1), fx:Inf(1)}
 
 	//secant
 	bordersSearchAlg := secantAuto.NewBordersSearchAlgorithm(F, derivativeF)
 	secantMethod := secantAuto.NewMethod(paymentsSumIsPositive, bordersSearchAlg , method.minRateOfIrrDecrease)
 
-	xSecant, resType, _ := secantMethod.Calculate(F, derivativeF, secondDerivativeF, method.params)
-	canFinish, bestSolution := updateBestSolution(xSecant, F, resType, bestSolution)
+	xSecant := secantMethod.Calculate(F, derivativeF, secondDerivativeF, method.params)
+	canFinish, bestSolution := updateBestSolution(xSecant, F, bestSolution)
 	if canFinish{
 		return SolutionFound(bestSolution.x)
 	}
@@ -95,15 +95,15 @@ func (method XIRRMethod) Calculate(payments IOrderedPayments) (result float64, r
 	return ErrorFound(AllNumericMethodsHaveBeenFailed)
 }
 
-func tryNewton(guess float64, F, derivativeF INumericFunc, methodParams *NumericMethodParams, bestSolution Solution ) (canFinish bool, newBest Solution) {
+func tryNewton(guess float64, F, derivativeF INumericFunc, methodParams *Params, bestSolution solution ) (canFinish bool, newBest solution) {
 	newtonMethod := newton.NewMethod(guess)
-	xNewton, resType, _ := newtonMethod.Calculate(F,derivativeF,methodParams)
-	return updateBestSolution(xNewton, F, resType, bestSolution)
+	xNewton := newtonMethod.Calculate(F,derivativeF,methodParams)
+	return updateBestSolution(xNewton, F, bestSolution)
 }
 
-func updateBestSolution(x float64, F INumericFunc, resType NumericResultType, currentBest Solution) (canFinish bool, newBest Solution){
-	if resType.IsSolution() {
-		bestSolution := bestSolutionOf(currentBest, Solution{x,F.ApplyTo(x) })
+func updateBestSolution(x IResult, F INumericFunc, currentBest solution) (canFinish bool, newBest solution){
+	if x.IsSolution() {
+		bestSolution := bestSolutionOf(currentBest, solution{x.Value(),F.ApplyTo(x.Value()) })
 		if closeEnough(IdealNPV, bestSolution.fx) {
 			return true, bestSolution
 		}
@@ -115,7 +115,7 @@ func closeEnough(first, second float64) bool{
 	return Abs( second - first) <= IrrEpsilon
 }
 
-func bestSolutionOf(old, new Solution ) Solution{
+func bestSolutionOf(old, new solution ) solution{
 	if Abs(new.fx) < Abs(old.fx){
 		return new
 	}
@@ -131,6 +131,6 @@ func IsPaymentsSumPositive(payments []IPayment) bool{
 }
 
 
-type Solution struct {
+type solution struct {
 	x, fx float64
 }
