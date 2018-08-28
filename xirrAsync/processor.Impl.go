@@ -32,13 +32,12 @@ func (p *RequestsProcessor) Start(coresCount int){
 
 
 //Private
-func stopCores(p *RequestsProcessor,cancellation chan bool ){
+func stopCores(p *RequestsProcessor, cancellation chan bool ){
 	for _,c := range p.cancellations{
 		c <- struct {}{}
-		<- c
+		<-c
 	}
 	p.cancellations = make([]chan interface{},0)
-
 	cancellation <- true
 }
 
@@ -62,7 +61,7 @@ func runProcessorCore(requests chan IRequest, responses chan IResponse, cancella
 			continue
 
 		case <- cancellation:
-			cancellation <- struct {}{}
+			close(cancellation)
 			return
 
 		}
