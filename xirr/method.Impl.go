@@ -84,12 +84,10 @@ func (method XIRRMethod) Calculate(payments IOrderedPayments) IResult {
 		return SolutionFound(bestSolution.x)
 	}
 
-	// In case of we failed both guesses and total sum is negative then try negative guess close to -1
-	if !paymentsSumIsPositive{
-		canFinish, bestSolution = tryNewton(IrrDefaultValue,F,derivativeF,method.params,bestSolution)
-		if canFinish{
-			return SolutionFound(bestSolution.x)
-		}
+	// In case of we failed both guesses then try negative guess close to -1
+	canFinish, bestSolution = tryNewton(IrrDefaultValue,F,derivativeF,method.params,bestSolution)
+	if canFinish{
+		return SolutionFound(bestSolution.x)
 	}
 
 	return ErrorFound(AllNumericMethodsHaveBeenFailed)
