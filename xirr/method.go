@@ -4,8 +4,7 @@
 
 package xirr
 
-import . "github.com/AndreyZWorkAccount/XIRR/numMethods"
-
+import . "github.com/krazybee/XIRR/numMethods"
 
 type CalcMethod interface {
 	Calculate(payments IOrderedPayments) IResult

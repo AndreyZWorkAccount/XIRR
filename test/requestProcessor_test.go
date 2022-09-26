@@ -4,45 +4,45 @@
 
 package test
 
-
 import (
 	. "testing"
 
-	"github.com/AndreyZWorkAccount/XIRR/xirrAsync"
 	"runtime"
 	"time"
+
+	"github.com/krazybee/XIRR/xirrAsync"
 )
 
-func TestRequestProcessorStartAndStop(t *T){
+func TestRequestProcessorStartAndStop(t *T) {
 	var coresCount int = 50000
-	var timeout time.Duration = 1*time.Second
+	var timeout time.Duration = 1 * time.Second
 
 	initialGoroutinesCount := runtime.NumGoroutine()
 
 	var processor xirrAsync.IProcessor = xirrAsync.NewProcessor()
 	processor.Start(coresCount)
 
-	if runtime.NumGoroutine() - initialGoroutinesCount != coresCount{
-		t.Errorf("Number of created goroutines should be %v, but it's %v", coresCount + initialGoroutinesCount, runtime.NumGoroutine())
+	if runtime.NumGoroutine()-initialGoroutinesCount != coresCount {
+		t.Errorf("Number of created goroutines should be %v, but it's %v", coresCount+initialGoroutinesCount, runtime.NumGoroutine())
 	}
 
-	for{
+	for {
 		select {
 
-		case isOk := <- processor.Stop():
-			if !isOk{
+		case isOk := <-processor.Stop():
+			if !isOk {
 				t.Error("Can't stop XIRR processor.")
 				return
 			}
-			if runtime.NumGoroutine() != initialGoroutinesCount{
+			if runtime.NumGoroutine() != initialGoroutinesCount {
 				t.Error("XIRR processor has been stopped, but goroutines are still running.")
 				return
-		    }
-		return
+			}
+			return
 
-		case <- time.After(timeout):
+		case <-time.After(timeout):
 			t.Error("Processor termination timeout.")
-		return
+			return
 
 		}
 	}

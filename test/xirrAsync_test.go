@@ -4,17 +4,17 @@
 
 package test
 
-
 import (
-	. "testing"
 	. "math"
+	. "testing"
 
-	"github.com/AndreyZWorkAccount/XIRR/xirrAsync"
-	"github.com/AndreyZWorkAccount/XIRR/numMethods"
 	"sync"
-	)
 
-func TestAsyncIrr_OneRequestInChan(t *T){
+	"github.com/krazybee/XIRR/numMethods"
+	"github.com/krazybee/XIRR/xirrAsync"
+)
+
+func TestAsyncIrr_OneRequestInChan(t *T) {
 	var coresCount int = 5
 	var processor xirrAsync.IProcessor = xirrAsync.NewProcessor()
 	processor.Start(coresCount)
@@ -22,14 +22,14 @@ func TestAsyncIrr_OneRequestInChan(t *T){
 	requests := processor.Requests()
 	responses := processor.Responses()
 
-	for id,testCase := range TestCases{
+	for id, testCase := range TestCases {
 		requests <- xirrAsync.NewRequest(int64(id), testCase.Payments)
-		resp := <- responses
+		resp := <-responses
 		verifyTestResult(resp.Result(), testCase.ExpectedValue, t)
 	}
 }
 
-func TestAsyncIrr_ManyRequestsInChan(t *T){
+func TestAsyncIrr_ManyRequestsInChan(t *T) {
 	var coresCount int = 5
 	var processor xirrAsync.IProcessor = xirrAsync.NewProcessor()
 	processor.Start(coresCount)
@@ -37,19 +37,21 @@ func TestAsyncIrr_ManyRequestsInChan(t *T){
 	requests := processor.Requests()
 	responses := processor.Responses()
 
-	testCases := make(map[int] TestCase);
-	for i,t := range TestCases{ testCases[i] = t}
+	testCases := make(map[int]TestCase)
+	for i, t := range TestCases {
+		testCases[i] = t
+	}
 
 	wg := sync.WaitGroup{}
 
-	for id,testCase := range testCases{
+	for id, testCase := range testCases {
 		requests <- xirrAsync.NewRequest(int64(id), testCase.Payments)
 
 		go func() {
 			wg.Add(1)
 			defer wg.Done()
 
-			resp := <- responses
+			resp := <-responses
 			expected := testCases[int(resp.RequestId())].ExpectedValue
 			verifyTestResult(resp.Result(), expected, t)
 		}()
@@ -57,10 +59,6 @@ func TestAsyncIrr_ManyRequestsInChan(t *T){
 
 	wg.Wait()
 }
-
-
-
-
 
 func verifyTestResult(res numMethods.IResult, expectedValue float64, t *T) {
 
@@ -70,8 +68,7 @@ func verifyTestResult(res numMethods.IResult, expectedValue float64, t *T) {
 	if res.Error() != nil {
 		t.Error(res.Error())
 	}
-	if Abs(res.Value() - expectedValue) > 0.0000000001 {
+	if Abs(res.Value()-expectedValue) > 0.0000000001 {
 		t.Errorf("Expected: %v\n. Actual: %v\n", expectedValue, res.Value())
 	}
 }
-

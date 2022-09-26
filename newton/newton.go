@@ -7,24 +7,23 @@ package newton
 import (
 	. "math"
 
-	. "github.com/AndreyZWorkAccount/XIRR/numMethods"
+	. "github.com/krazybee/XIRR/numMethods"
 )
 
 type Method struct {
 	initialGuess float64
 }
 
-func NewMethod(guess float64) Method{
-	return Method{initialGuess:guess}
+func NewMethod(guess float64) Method {
+	return Method{initialGuess: guess}
 }
-
 
 // NumericMethodUsingDerivative interface implementation
 func (nm *Method) Calculate(F INumericFunc, derivativeF INumericFunc, methodParams *Params) IResult {
 
 	xCurrent := nm.initialGuess
 
-	var iterationPassed  uint64 = 0
+	var iterationPassed uint64 = 0
 	for iterationPassed < methodParams.MaxIterationsCount {
 
 		fValue := F.ApplyTo(xCurrent)
@@ -32,7 +31,7 @@ func (nm *Method) Calculate(F INumericFunc, derivativeF INumericFunc, methodPara
 
 		xNext := xCurrent - fValue/fDerivativeValue
 
-		dx := Abs(xNext-xCurrent)
+		dx := Abs(xNext - xCurrent)
 		if dx <= methodParams.Epsilon {
 			return SolutionFound(xNext)
 		}

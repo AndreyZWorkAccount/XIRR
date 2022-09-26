@@ -7,13 +7,11 @@ package secantModified
 import (
 	. "math"
 
-	. "github.com/AndreyZWorkAccount/XIRR/numMethods"
-	. "github.com/AndreyZWorkAccount/XIRR/float.Extensions"
+	. "github.com/krazybee/XIRR/float.Extensions"
+	. "github.com/krazybee/XIRR/numMethods"
 )
 
-
 type Method struct {
-
 	xLeftInit, xRightInit float64
 
 	//Min allowed value of dX[i] - dX[i-1]. Allows to indicate when iterations aren't effective anymore.
@@ -21,18 +19,17 @@ type Method struct {
 }
 
 func NewMethod(xLeft, xRight, minRateOfXDecrease float64) Method {
-	return Method{xLeftInit: xLeft, xRightInit:xRight, minimumRateOfXDecrease:minRateOfXDecrease}
+	return Method{xLeftInit: xLeft, xRightInit: xRight, minimumRateOfXDecrease: minRateOfXDecrease}
 }
 
-
 // NumericMethodUsingSecondDerivative interface implementation
-func (method *Method) Calculate(F INumericFunc, derivativeF INumericFunc, secondDerivativeF INumericFunc, methodParams *Params) IResult{
+func (method *Method) Calculate(F INumericFunc, derivativeF INumericFunc, secondDerivativeF INumericFunc, methodParams *Params) IResult {
 
 	xLeft := method.xLeftInit
 	xRight := method.xRightInit
-	isConvergesOnLeft := isConvergesOnLeft(xLeft,F,secondDerivativeF)
+	isConvergesOnLeft := isConvergesOnLeft(xLeft, F, secondDerivativeF)
 
-	var iterationPassed  uint64 = 0
+	var iterationPassed uint64 = 0
 	var solutionFound = false
 	var err *NumericMethodError = nil
 
@@ -42,7 +39,7 @@ func (method *Method) Calculate(F INumericFunc, derivativeF INumericFunc, second
 			return ErrorFound(err)
 		}
 		if solutionFound {
-			return SolutionFound(Average(xLeft,xRight))
+			return SolutionFound(Average(xLeft, xRight))
 		}
 		iterationPassed++
 	}
@@ -50,35 +47,35 @@ func (method *Method) Calculate(F INumericFunc, derivativeF INumericFunc, second
 	return NoSolutionFound()
 }
 
-func (method *Method) runIteration(xLeft float64, xRight float64, isConvergesOnLeft bool, methodParams *Params, F INumericFunc, derivativeF INumericFunc, secondDerivativeF INumericFunc)(xLeftOut float64, xRightOut float64, solutionFound bool,err *NumericMethodError ) {
+func (method *Method) runIteration(xLeft float64, xRight float64, isConvergesOnLeft bool, methodParams *Params, F INumericFunc, derivativeF INumericFunc, secondDerivativeF INumericFunc) (xLeftOut float64, xRightOut float64, solutionFound bool, err *NumericMethodError) {
 	prevIterationDx := Abs(xRight - xLeft)
 
 	FxRight := F.ApplyTo(xRight)
 	FxLeft := F.ApplyTo(xLeft)
 
-	if AnyNanOrInfinity(FxLeft,FxRight){
+	if AnyNanOrInfinity(FxLeft, FxRight) {
 		return xLeft, xRight, false, FunctionValueIsNanOrInfinityErr
 	}
 
 	if isConvergesOnLeft {
 		dFxLeft := derivativeF.ApplyTo(xLeft)
-		xRight = xRight - ((xRight - xLeft)/(FxRight - FxLeft))*FxRight
+		xRight = xRight - ((xRight-xLeft)/(FxRight-FxLeft))*FxRight
 		xLeft = xLeft - FxLeft/dFxLeft
 	} else {
 		dFxRight := derivativeF.ApplyTo(xRight)
 		xRight = xRight - FxRight/dFxRight
-		xLeft = xLeft - ((xRight - xLeft)/(FxRight - FxLeft))*FxLeft
+		xLeft = xLeft - ((xRight-xLeft)/(FxRight-FxLeft))*FxLeft
 	}
 
 	dx := Abs(xRight - xLeft)
 	if dx < methodParams.Epsilon {
-		return xLeft,xRight, true, nil
+		return xLeft, xRight, true, nil
 	}
 
-	if Abs(dx - prevIterationDx) < method.minimumRateOfXDecrease{
-		xAvg := Average(xLeft,xRight)
+	if Abs(dx-prevIterationDx) < method.minimumRateOfXDecrease {
+		xAvg := Average(xLeft, xRight)
 		FxAvg := F.ApplyTo(xAvg)
-		if (FxLeft < 0 && FxAvg > 0) || (FxLeft > 0 && FxAvg < 0){
+		if (FxLeft < 0 && FxAvg > 0) || (FxLeft > 0 && FxAvg < 0) {
 			xRight = xAvg
 		} else {
 			xLeft = xAvg
@@ -88,7 +85,7 @@ func (method *Method) runIteration(xLeft float64, xRight float64, isConvergesOnL
 	return xLeft, xRight, false, nil
 }
 
-func isConvergesOnLeft(xLeft float64, F INumericFunc, secondDerivativeF INumericFunc ) (bool){
+func isConvergesOnLeft(xLeft float64, F INumericFunc, secondDerivativeF INumericFunc) bool {
 	FxLeft := F.ApplyTo(xLeft)
 	ddFxLeft := secondDerivativeF.ApplyTo(xLeft)
 	if (FxLeft <= 0 && ddFxLeft <= 0) || (FxLeft >= 0 && ddFxLeft >= 0) {
@@ -96,5 +93,3 @@ func isConvergesOnLeft(xLeft float64, F INumericFunc, secondDerivativeF INumeric
 	}
 	return false
 }
-
-

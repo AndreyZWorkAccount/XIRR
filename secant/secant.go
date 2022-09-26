@@ -7,31 +7,30 @@ package secant
 import (
 	. "math"
 
-	. "github.com/AndreyZWorkAccount/XIRR/numMethods"
-	. "github.com/AndreyZWorkAccount/XIRR/float.Extensions"
-	)
+	. "github.com/krazybee/XIRR/float.Extensions"
+	. "github.com/krazybee/XIRR/numMethods"
+)
 
 type Method struct {
 	xLeftInit, xRightInit float64
 }
 
-func NewMethod(xLeft, xRight float64) Method{
+func NewMethod(xLeft, xRight float64) Method {
 	return Method{xLeft, xRight}
 }
 
-
 // NumericMethod interface implementation
-func (s *Method) Calculate(F INumericFunc, methodParams *Params) Result{
+func (s *Method) Calculate(F INumericFunc, methodParams *Params) Result {
 	xLeft := s.xLeftInit
 	xRight := s.xRightInit
 
-	var iterationPassed  uint64 = 0
+	var iterationPassed uint64 = 0
 	for iterationPassed < methodParams.MaxIterationsCount {
 
 		//check if we reach necessary precision
 		dx := Abs(xRight - xLeft)
-		if dx < methodParams.Epsilon{
-			return SolutionFound(Average(xLeft,xRight))
+		if dx < methodParams.Epsilon {
+			return SolutionFound(Average(xLeft, xRight))
 		}
 
 		xRightOld := xRight
@@ -39,7 +38,7 @@ func (s *Method) Calculate(F INumericFunc, methodParams *Params) Result{
 		fxRight := F.ApplyTo(xRight)
 		fxLeft := F.ApplyTo(xLeft)
 
-		if AnyNanOrInfinity(fxLeft,fxRight){
+		if AnyNanOrInfinity(fxLeft, fxRight) {
 			return ErrorFound(FunctionValueIsNanOrInfinityErr)
 		}
 
@@ -48,7 +47,7 @@ func (s *Method) Calculate(F INumericFunc, methodParams *Params) Result{
 			return ErrorFound(FunctionsDeltaIsZeroErr)
 		}
 
-		xRight = (xLeft*F.ApplyTo(xRight) - xRight*F.ApplyTo(xLeft))/deltaF
+		xRight = (xLeft*F.ApplyTo(xRight) - xRight*F.ApplyTo(xLeft)) / deltaF
 		xLeft = xRightOld
 
 		iterationPassed++

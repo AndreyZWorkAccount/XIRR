@@ -5,12 +5,11 @@
 package secantAuto
 
 import (
-	. "github.com/AndreyZWorkAccount/XIRR/numMethods"
-	"github.com/AndreyZWorkAccount/XIRR/secantModified"
-	)
+	. "github.com/krazybee/XIRR/numMethods"
+	"github.com/krazybee/XIRR/secantModified"
+)
 
 type Method struct {
-
 	paymentsSumIsPositive bool
 
 	bordersSearchAlg IBordersSearchAlgorithm
@@ -19,26 +18,23 @@ type Method struct {
 	minimumRateOfXDecrease float64
 }
 
-func NewMethod(paymentsSumIsPositive bool, searchAlg IBordersSearchAlgorithm, minRateOfXDecrease float64) Method{
-	return Method{paymentsSumIsPositive:paymentsSumIsPositive, bordersSearchAlg:searchAlg, minimumRateOfXDecrease:minRateOfXDecrease}
+func NewMethod(paymentsSumIsPositive bool, searchAlg IBordersSearchAlgorithm, minRateOfXDecrease float64) Method {
+	return Method{paymentsSumIsPositive: paymentsSumIsPositive, bordersSearchAlg: searchAlg, minimumRateOfXDecrease: minRateOfXDecrease}
 }
 
-
-
-
 // NumericMethodUsingSecondDerivative interface implementation
-func (method *Method) Calculate(F INumericFunc, derivativeF INumericFunc, secondDerivativeF INumericFunc, methodParams *Params) IResult{
+func (method *Method) Calculate(F INumericFunc, derivativeF INumericFunc, secondDerivativeF INumericFunc, methodParams *Params) IResult {
 
-		borders := method.bordersSearchAlg.FindInitialBorders(method.paymentsSumIsPositive)
+	borders := method.bordersSearchAlg.FindInitialBorders(method.paymentsSumIsPositive)
 
-		//iterate over borders and return first successful result
-		for _, border := range borders{
-			secantModified := secantModified.NewMethod(border.Left(), border.Right(), method.minimumRateOfXDecrease)
-			ans := secantModified.Calculate(F,derivativeF,secondDerivativeF,methodParams)
+	//iterate over borders and return first successful result
+	for _, border := range borders {
+		secantModified := secantModified.NewMethod(border.Left(), border.Right(), method.minimumRateOfXDecrease)
+		ans := secantModified.Calculate(F, derivativeF, secondDerivativeF, methodParams)
 
-			if ans.IsSolution(){
-				return ans
-			}
+		if ans.IsSolution() {
+			return ans
 		}
-		return NoSolutionFound()
+	}
+	return NoSolutionFound()
 }
